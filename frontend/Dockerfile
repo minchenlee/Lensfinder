@@ -14,7 +14,7 @@ RUN yarn install
 COPY . .
 
 # Build the app
-RUN yarn build
+RUN npm build
 
 # serve stage
 FROM node:19.0.0-bullseye-slim as serve
@@ -23,7 +23,7 @@ FROM node:19.0.0-bullseye-slim as serve
 WORKDIR /frontend
 
 # Copy the package.json and yarn.lock/package-lock.json files to the container
-COPY --from=build /frontend/build ./build
+COPY --from=build /frontend/build /frontend/build
 COPY package.json yarn.lock ./
 RUN yarn install --production
 
