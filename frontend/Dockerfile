@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # serve stage
-FROM node:19.0.0-bullseye-slim as build
+FROM node:19.0.0-bullseye-slim as serve
 
 # 在 contaianer 中創建 front end directory
 WORKDIR /frontend
