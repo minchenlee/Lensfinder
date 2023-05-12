@@ -14,7 +14,7 @@ RUN yarn install
 COPY . .
 
 # Build the app
-RUN npm build
+RUN npm run build
 
 # serve stage
 FROM node:19.0.0-bullseye-slim as serve
