@@ -1,0 +1,57 @@
+name: stylish deploy
+
+on:
+ push:
+   branches:
+     - develop
+
+jobs:
+  build:
+   runs-on: ubuntu-latest
+
+   steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Docker Login
+      uses: docker/login-action@v2.1.0
+      with:
+      username: ${{ secrets.DOCKERHUB_USERNAME }}
+      password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Create ENV file
+      run: |
+        cd backend
+        echo "${{ secrets.ENV_FILE }}" > .env
+        cd ..
+
+    - name: Build and push Docker images
+      run: |
+        cd backend
+        docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.BACKEND_IMAGE_NAME }} .
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.BACKEND_IMAGE_NAME }}
+
+        cd ..
+        cd frontend
+        docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FRONTEND_IMAGE_NAME }} .
+        docker push  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FRONTEND_IMAGE_NAME }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: SSH into EC2 instance and deploy Docker image
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        script: |
+          cd github/Lensfinder
+          git pull
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.BACKEND_IMAGE_NAME }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FRONTEND_IMAGE_NAME }}
+          docker-compose down
+          docker-compose up -d
+          docker image prune -af
