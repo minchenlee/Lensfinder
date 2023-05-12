@@ -22,6 +22,6 @@ services:
       - lensfinder_network
 
 networks:
-  lensfinder_network_network:
+  lensfinder_network:
     driver: bridge
  
