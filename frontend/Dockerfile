@@ -5,29 +5,27 @@ FROM node:19.0.0-bullseye-slim as build
 WORKDIR /frontend
 
 # Copy the package.json and yarn.lock/package-lock.json files to the container
-COPY package.json yarn.lock ./
+COPY package.json ./
 
 # Install the dependencies
-RUN yarn install
+RUN npm install
 
 # Copy the entire project to the container
 COPY . .
 
-# Build the app
+# Build the application in production mode
 RUN npm run build
 
 # serve stage
-FROM node:19.0.0-bullseye-slim as serve
+FROM node:19.0.0-bullseye-slim as build
 
 # 在 contaianer 中創建 front end directory
 WORKDIR /frontend
 
-# Copy the package.json and yarn.lock/package-lock.json files to the container
+# --from=build 代表從 build stage 複製檔案
 COPY --from=build /frontend/build /frontend/build
-COPY package.json yarn.lock ./
-RUN yarn install --production
 
-# Expose the port
+# Expose the port that the application is listening on
 EXPOSE 3000
 
 # 要先裝 serve package，不然會出現錯誤s
