@@ -23,7 +23,7 @@ FROM node:19.0.0-bullseye-slim as serve
 WORKDIR /frontend
 
 # Copy the package.json and yarn.lock/package-lock.json files to the container
-COPY --from=build /app/build ./build
+COPY --from=build /frontend/build ./build
 COPY package.json yarn.lock ./
 RUN yarn install --production
 
