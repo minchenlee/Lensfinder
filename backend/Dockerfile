@@ -8,7 +8,7 @@ WORKDIR /backend
 COPY package*.json ./
 
 # Install the dependencies
-RUN npm ci --only=production
+RUN npm install --only=production --no-save
 
 # Bundle app source
 COPY . .
