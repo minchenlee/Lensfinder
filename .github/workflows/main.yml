@@ -28,12 +28,12 @@ jobs:
     - name: Build and push Docker images
       run: |
         cd backend
-        docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.BACKEND_IMAGE_NAME }} .
+        docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.BACKEND_IMAGE_NAME }} .
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.BACKEND_IMAGE_NAME }}
 
         cd ..
         cd frontend
-        docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FRONTEND_IMAGE_NAME }} .
+        docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FRONTEND_IMAGE_NAME }} .
         docker push  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FRONTEND_IMAGE_NAME }}
 
   deploy:
