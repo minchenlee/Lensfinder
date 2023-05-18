@@ -1,0 +1,278 @@
+
+.container-fluid {
+  height: 100%;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.grid-container {
+}
+
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.square-box {
+  height: 300px;
+  width: 350px;
+  border-radius: 8px;
+}
+
+.box-shadow {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border:1px solid rgba(255, 255, 255, 0.18);
+}
+
+.blur-mask{
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  position: absolute;
+  z-index: 100;
+}
+
+.pageBlock {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload {
+  background-image: url('../../../images/upload-background.jpg');
+  background-repeat: no-repeat;
+  background-size: auto 1400px;
+  background-position: 10% 5%;
+}
+
+
+.squares-placer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.upload-rt-overview {
+  font-size: 18px;
+  background-color: #232323;
+  color: #e8e8e8;
+  z-index: 3;
+  position: relative;
+}
+
+.analyzing-mask {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 100;
+  display: none; 
+}
+
+.is-analyzing .analyzing-mask {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+}
+
+.analyzing-icon {
+  /* width: 40px;
+  height: 40px; */
+  font-size: 48px;
+  position: absolute;
+  top: auto;
+  left: auto;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform-origin: center;
+    transform: rotate(0deg);
+  }
+  100% {
+    transform-origin: center;
+    transform: rotate(359deg);
+  }
+}
+
+.drag-drop-area {
+  /* border: 2px dashed #ccc; */
+  border-left: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+
+.arrow{
+  font-size: 48px;
+  position: absolute;
+  top: 90%;
+  color: #e8e8e8;
+}
+
+.arrow i{
+  cursor: pointer;
+}
+
+.arrow-down div{
+  rotate: 0deg;
+  transition: rotate 0.7s;
+}
+
+.arrow-up div{
+  rotate: 179.9deg;
+  transition: rotate 0.7s;
+}
+
+.dashboard {
+  background-color: #232323;
+  color: #ffffff;
+  position: relative;
+  /* display: flex;
+  flex-direction: column; */
+}
+
+.analysis-overview {
+  font-size: 16px;
+  font-family: "Source_Code_Pro";
+  font-weight: 500;
+}
+
+.photo-count{
+  font-size: 72px;
+  font-weight: 800;
+}
+
+.analysis-overview-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: start;
+}
+
+.analysis-overview-info p{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.chart-switcher {
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  position: absolute;
+  top: auto;
+  left: auto;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: color 0.5s, background-color 0.5s;
+  font-size: 36px;
+  cursor: pointer;
+}
+
+
+.chart-switcher:hover{
+  color: #232323;
+  background-color: #e8e8e8;
+  transition: color 0.5s, background-color 0.5s;
+}
+
+.chart-switcher:active{
+  background-color: #5A7D7C;
+  transition: background-color 0.05s;
+}
+
+.switcher-decoration {
+  position: absolute;
+  top: auto;
+  left: auto;
+}
+
+.circle-1 {
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  z-index: 9;
+  background-color: #6d8d8c;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.circle-2 {
+  width: 115px;
+  height: 115px;
+  border-radius: 100px;
+  z-index: 8;
+  background-color: #7da1a0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.circle-3 {
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  z-index: 7;
+  background-color: #a0baba4d;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.pulse .circle-1 {
+  background-color: #6d8d8c;
+  opacity: 0.7;
+  transition: opacity 0.3s ease-out;
+}
+
+.pulse .circle-2 {
+  background-color: #6d8d8c;
+  opacity: 0.3;
+  transition: opacity 0.4s ease-out;
+}
+
+.pulse .circle-3 {
+  background-color: #6d8d8c;
+  opacity: 0.2;
+  transition: opacity 0.4s ease-out;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.decoration-square{
+  border: 2px solid #ccc;
+}
