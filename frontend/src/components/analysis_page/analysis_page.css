@@ -1,4 +1,5 @@
 
+
 .container-fluid {
   height: 100%;
   padding-left: 0 !important;
@@ -60,6 +61,7 @@
   background-repeat: no-repeat;
   background-size: auto 1400px;
   background-position: 10% 5%;
+  background-attachment: fixed;
 }
 
 
@@ -78,6 +80,7 @@
   color: #e8e8e8;
   z-index: 3;
   position: relative;
+  cursor: pointer;
 }
 
 .analyzing-mask {
@@ -85,7 +88,8 @@
   width: 100%;
   position: absolute;
   z-index: 100;
-  display: none; 
+  display: none;
+  border-radius: 8px;
 }
 
 .is-analyzing .analyzing-mask {
@@ -122,6 +126,11 @@
   z-index: 1;
 }
 
+.drag-drop-icon{
+  margin-top: 12px;
+  font-size: 24px;
+}
+
 
 .arrow{
   font-size: 48px;
@@ -136,11 +145,13 @@
 
 .arrow-down div{
   rotate: 0deg;
+  opacity: 1.0;
   transition: rotate 0.7s;
 }
 
 .arrow-up div{
   rotate: 179.9deg;
+  opacity: 0.5;
   transition: rotate 0.7s;
 }
 
@@ -154,12 +165,14 @@
 
 .analysis-overview {
   font-size: 16px;
+  /* font-size: 1vw; */
   font-family: "Source_Code_Pro";
   font-weight: 500;
 }
 
 .photo-count{
-  font-size: 72px;
+  /* font-size: 72px; */
+  font-size: 5vw;
   font-weight: 800;
 }
 
@@ -174,6 +187,14 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
+
+.save-button {
+  width: 8vw;
+  margin-top: 2vh;
+  /* font-size: 16px !important; */
+  border-radius: 2vw !important;
+}
+
 
 .bold {
   font-weight: 700;

@@ -3,17 +3,21 @@ import './analysis_page.css'
 import Layout from '../layout/layout'
 
 import { FileUploader } from "react-drag-drop-files";  // 拖拉檔案上傳的套件
-const fileTypes = ["JPG", "JPEG"];
+const fileTypes = ["JPG", "JPEG", "HEIC"];
 
 import { create as createExifParser } from 'exif-parser';  // 解析圖片 EXIF 的套件
 import 'animate.css';  // 動畫套件
 
+// 滾動套件
 import Scroll from 'react-scroll';
 let scroller = Scroll.scroller;
 
 // 圖表
 import BarChart from './chart/BarChart';
 import PieChart from './chart/PieChart';
+
+// 彈出視窗
+import Modal from './modal/modal';
 
 // Create a context
 const Context = createContext();
@@ -23,17 +27,35 @@ async function ParseEXIF(file, setFileList) {
   const arrayBuffer = await file.arrayBuffer();
   const parser = createExifParser(arrayBuffer);
   const result = parser.parse();
-  // console.log(result.tags);
+  
+  // console.log(file);
+  // console.log(Object.keys(result.tags).length);
+  // 如果圖片沒有 EXIF，則回傳 true
+  if (Object.keys(result.tags).length <= 10) {
+    return true; 
+  }
 
   // 將解析結果存入 fileList
   setFileList(fileList => [...fileList, result.tags]);
+  return false;
 }
 
 // 解析多張圖片 EXIF
-async function ParseMultiplePicture(files, setFileList) {
-  for (const file of files) {
-    ParseEXIF(file, setFileList);
+async function ParseMultiplePicture(files, setFileList, pictureCountRef) {
+  // Analyzing 圖片數量的動畫
+  if (pictureCountRef.current){
+    pictureCountRef.current.classList.add('is-analyzing');
   }
+
+  for (const file of files) {
+    const isFailed = await ParseEXIF(file, setFileList);
+    if (isFailed) {
+      pictureCountRef.current.classList.remove('is-analyzing');
+      return isFailed;
+    }
+  }
+
+  return false;
 }
 
 
@@ -41,14 +63,13 @@ async function ParseMultiplePicture(files, setFileList) {
 function DragDrop() {
   const { setFileList, pictureCountRef } = useContext(Context);
 
-  function handleChange(files) {
+  async function handleChange(files) {
     // 解析多張圖片
-    ParseMultiplePicture(files, setFileList);
-
-    // Analyzing 圖片數量的動畫
-    if (pictureCountRef.current){
-      pictureCountRef.current.classList.add('is-analyzing');
-    }    
+    const isFailed = await ParseMultiplePicture(files, setFileList, pictureCountRef);
+    if (isFailed) {
+      alert('Please upload images that contain EXIF data.');
+      return;
+    }
   };
 
   // 圖片拖拉區域的 component
@@ -58,7 +79,11 @@ function DragDrop() {
         <div>
           <p className='mb-0'>Drag and drop your files here,</p>
           <p className='mb-0'>or click here to upload your pictures.</p>
+          <div className="drag-drop-icon">
+            <i className="bi bi-file-earmark-arrow-up"></i>
+          </div>
         </div>
+          
       </div>
     );
   }
@@ -69,7 +94,9 @@ function DragDrop() {
     name="file" 
     multiple={true} 
     types={fileTypes}
-    children={<DragDropArea/>}/>
+    children={<DragDropArea/>}
+    onTypeError={() => alert('Please upload JPG or JPEG or HEIF files.')}
+    />
   );
 }
 
@@ -78,14 +105,13 @@ function DragDrop() {
 function UploadRTOverview() {
   const { fileList, setFileList, pictureCountRef } = useContext(Context);
 
-  function handleChange(files) {
+  async function handleChange(files) {
     // 解析多張圖片
-    ParseMultiplePicture(files, setFileList);
-
-    // Analyzing 圖片數量的動畫
-    if (pictureCountRef.current){
-      pictureCountRef.current.classList.add('is-analyzing');
-    }    
+    const isFailed = await ParseMultiplePicture(files, setFileList, pictureCountRef);
+    if (isFailed) {
+      alert('Please upload JPG or JPEG or HEIF files.');
+      return;
+    }
   };
 
   return (
@@ -108,7 +134,9 @@ function UploadRTOverview() {
         </div>
       </div>
     </div>
-    }/>
+    }
+    onTypeError={() => alert('Please upload JPG or JPEG files.')}
+    />
   )
 }
 
@@ -285,6 +313,7 @@ function AnalysisOverview({fileList, imagesInfoDict, chartInlineStyle}) {
         <div>
           <p className='photo-count mb-0'>{fileList.length}</p>
           <p className='mb-0'>photos</p>
+          <button className="btn btn-outline-light save-button" data-bs-toggle="modal" data-bs-target="#signInUpModal"> Save </button>
         </div>
       </div>
       <div className='analysis-overview-info col-8'>
@@ -296,6 +325,9 @@ function AnalysisOverview({fileList, imagesInfoDict, chartInlineStyle}) {
     </div>
   )
 };
+
+
+
 
 
 function Dashboard(){
@@ -350,20 +382,20 @@ function Dashboard(){
         </div>
         <div className='col-5 me-auto center-all'>
           {isSwitchChart ? 
-              <div className='pie-chart center-all' style={chartInlineStyle}>
-                <PieChart
-                Context={Context}
-                dataDict={imagesInfoDict.LensModel}
-                name={'LensModel'}
-                />
-              </div> 
-              : 
-              <BarChart
+            <div className='pie-chart center-all' style={chartInlineStyle}>
+              <PieChart
               Context={Context}
-              dataDict={imagesInfoDict.ShutterSpeed}
-              backgroundColor={'rgb(99, 255, 132)'}
-              name={'ShutterSpeed'}
+              dataDict={imagesInfoDict.LensModel}
+              name={'LensModel'}
               />
+            </div> 
+            : 
+            <BarChart
+            Context={Context}
+            dataDict={imagesInfoDict.ShutterSpeed}
+            backgroundColor={'rgb(99, 255, 132)'}
+            name={'ShutterSpeed'}
+            />
           }
         </div>
       </div>
@@ -435,7 +467,7 @@ function AnalysisPage() {
   }
 
   useEffect(() => {
-    console.log(fileList);
+    // console.log(fileList);
     analyze(fileList, setImagesInfoDict, pictureCountRef);
   }, [fileList]);
 
@@ -469,13 +501,13 @@ function AnalysisPage() {
         const dashboardVisibleHeight = Math.max(0, Math.min(dashboardRect.bottom, windowHeight) - Math.max(dashboardRect.top, 0));
         const uploadVisibleHeight = Math.max(0, Math.min(uploadRect.bottom, windowHeight) - Math.max(uploadRect.top, 0));
 
-        if (dashboardVisibleHeight >= windowHeight ) {
+        if (dashboardVisibleHeight >= windowHeight) {
           setSection('upload');
           arrowRef.current?.classList.remove('arrow-down');
           arrowRef.current?.classList.add('arrow-up');
         }
 
-        if (uploadVisibleHeight >= windowHeight ) {
+        if (uploadVisibleHeight >= windowHeight) {
           setSection('dashboard');
           arrowRef.current?.classList.remove('arrow-up');
           arrowRef.current?.classList.add('arrow-down');
@@ -556,6 +588,7 @@ function AnalysisPage() {
                 <h5 className='mb-0'> Hey, mind uploading the images? Then swing back here. Thanks! </h5>
               </div>}
               <Dashboard/>
+              <Modal/>
             </section>
         </div>
       </Context.Provider>
@@ -571,6 +604,30 @@ export default AnalysisPage
 
 
 
+{/* <section id="dashboard" ref={dashboardRef} className='' >
+  <div id="carouselExample" className="carousel slide pageBlock dashboard">
+    <div className="carousel-inner">
+      <div className="carousel-item active">
+          {fileList.length === 0 && 
+        <div className="blur-mask center-all">
+          <h5 className='mb-0'> Hey, mind uploading the images? Then swing back here. Thanks! </h5>
+        </div>}
+        <Dashboard/>
+      </div>
+      <div className="carousel-item">
+        <h1>test</h1>
+      </div>
+    </div>
+    <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span className="visually-hidden">Previous</span>
+    </button>
+    <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <span className="carousel-control-next-icon" aria-hidden="true"></span>
+      <span className="visually-hidden">Next</span>
+    </button>
+  </div>
+</section> */}
 
 
 // Decoration component

@@ -5,7 +5,6 @@ import './index.css'
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-
 import * as bootstrap from 'bootstrap'
 import * as Popper from '@popperjs/core'
 
