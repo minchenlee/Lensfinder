@@ -1,0 +1,30 @@
+.navbar{
+  height: 90px;
+  background-color: rgb(35, 35, 35);
+}
+
+.grey-glass {
+  background: linear-gradient(135deg, rgba(35, 35, 35, 0.8), rgba(35, 35, 35, 0.8));
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border:1px solid rgba(35, 35, 35, 0.18);
+}
+
+.brand{
+  margin-left: 100px;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.nav-item{
+  margin-left: 50px;
+}
+
+.link{
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.link:hover{
+  color: #a9a7a7;
+}

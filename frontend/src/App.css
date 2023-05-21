@@ -1,8 +1,9 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
   text-align: center;
+  font-family: 'LibreBaskerville-Regular';
 }
 
 .logo {
@@ -32,6 +33,19 @@
     animation: logo-spin infinite 20s linear;
   }
 }
+
+@font-face {
+  font-family: "LibreBaskerville-Regular";   /*Can be any text*/
+  src: local("LibreBaskerville-Regular"),
+    url("./fonts/Libre_Baskerville/LibreBaskerville-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Source_Code_Pro";   /*Can be any text*/
+  src: local("Source_Code_Pro"),
+    url("./fonts/Source_Code_Pro/SourceCodePro-VariableFont_wght.ttf") format("truetype");
+}
+
 
 .card {
   padding: 2em;

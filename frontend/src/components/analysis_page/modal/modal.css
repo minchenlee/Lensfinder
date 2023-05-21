@@ -1,0 +1,123 @@
+
+/* 登入介面 */
+.signInUpModal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* height: 30vh; */
+
+  pointer-events: auto;
+  background-clip: padding-box;
+  border-radius: 12px;
+
+  color: #e8e8e8;
+  background: linear-gradient(135deg, rgba(219, 219, 219, 0.1), rgba(233, 231, 231, 0.05));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  font-family: "Source_Code_Pro";
+}
+
+.SIUM-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.2rem;
+}
+
+.SIUM-header button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  font-size: 24px;
+  color: #e8e8e8;
+  opacity: 0.5;
+  transition: opacity 0.5s;
+  border: none;
+  width: 32px;
+  height: 32px;
+}
+
+.SIUM-header button:hover{
+  opacity: 1.0;
+  transition: opacity 0.5s;
+}
+
+.SIUM-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.SIUM-modal-body > * {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.SIUM-modal-body form > div {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.SIUM-modal-body button {
+  width: 40%;
+  border-radius: 20px;
+}
+
+.SIUM-modal-body input {
+  height: 32px;
+  width: 70%;
+  padding-left: 10px;
+  
+  border: rgb(232, 232, 232, 0) 1px solid;
+  border-radius: 10px;
+  outline: none;
+  transition: border 0.5s;
+}
+
+.SIUM-modal-body input:focus {
+  border: #e8e8e8 1px solid;
+  transition: border 0.5s;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 15%;
+  top: auto;
+  margin: auto;
+  width: 10% !important;
+  border: none;
+  background-color: transparent;
+  color: #e8e8e8;
+  opacity: 0.6;
+}
+
+.back-button {
+  background-color: transparent;
+  border: none;
+  color: #e8e8e8;
+}
+
+.back-button:hover {
+  color: #a9a7a7;
+}
+
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-message p{
+  text-align: start;
+  font-size: 14px;
+  color: #e3c73d;
+  font-weight: bold;
+  width: 70%;
+}
+
