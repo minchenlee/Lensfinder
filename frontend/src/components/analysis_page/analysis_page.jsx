@@ -8,19 +8,26 @@ const fileTypes = ["JPG", "JPEG", "HEIC"];
 import { create as createExifParser } from 'exif-parser';  // 解析圖片 EXIF 的套件
 import 'animate.css';  // 動畫套件
 
+import moment from 'moment-timezone';  // 處理時間的套件
+
+import { AllPageContext } from '../../App';  // 全域 analysisContext
+
 // 滾動套件
 import Scroll from 'react-scroll';
 let scroller = Scroll.scroller;
 
-// 圖表
-import BarChart from './chart/BarChart';
-import PieChart from './chart/PieChart';
+// 儀表板
+import Dashboard from './dashboard/dashboard';
+
+// 推薦頁面
+import RecommendationBlock from '../recommendation_block/recommendation_block';
 
 // 彈出視窗
-import Modal from './modal/modal';
+import Modal from '../modal/modal';
 
 // Create a context
-const Context = createContext();
+const analysisContext = createContext();
+export { analysisContext };
 
 // 解析圖片 EXIF 
 async function ParseEXIF(file, setFileList) {
@@ -61,7 +68,7 @@ async function ParseMultiplePicture(files, setFileList, pictureCountRef) {
 
 // 拖拉檔案上傳的 component
 function DragDrop() {
-  const { setFileList, pictureCountRef } = useContext(Context);
+  const { setFileList, pictureCountRef, setIsSaved } = useContext(analysisContext);
 
   async function handleChange(files) {
     // 解析多張圖片
@@ -70,6 +77,9 @@ function DragDrop() {
       alert('Please upload images that contain EXIF data.');
       return;
     }
+
+    // 重置已經按過 save 按鈕的狀態
+    setIsSaved(false);
   };
 
   // 圖片拖拉區域的 component
@@ -83,7 +93,6 @@ function DragDrop() {
             <i className="bi bi-file-earmark-arrow-up"></i>
           </div>
         </div>
-          
       </div>
     );
   }
@@ -103,7 +112,7 @@ function DragDrop() {
 
 // Upload Image Real Time Overview
 function UploadRTOverview() {
-  const { fileList, setFileList, pictureCountRef } = useContext(Context);
+  const { fileList, setFileList, pictureCountRef, setIsSaved } = useContext(analysisContext);
 
   async function handleChange(files) {
     // 解析多張圖片
@@ -112,6 +121,9 @@ function UploadRTOverview() {
       alert('Please upload JPG or JPEG or HEIF files.');
       return;
     }
+
+    // 重置已經按過 save 按鈕的狀態
+    setIsSaved(false);
   };
 
   return (
@@ -175,6 +187,8 @@ function analyze(fileList, setImagesInfoDict, pictureCountRef) {
   }
 
   // 將資料分類  
+  let total = fileList.length;
+  let Make = [];
   let FocalLength = [];
   let FocalLengthIn35mmFormat = [];
   let Aperture = [];
@@ -186,6 +200,7 @@ function analyze(fileList, setImagesInfoDict, pictureCountRef) {
 
   // 將資料存入各個 list
   for (const file of fileList) {
+    Make.push(file.Make);
     FocalLength.push(Math.round(file.FocalLength));
     FocalLengthIn35mmFormat.push(Math.round(file.FocalLengthIn35mmFormat));
     Aperture.push(file.ApertureValue.toFixed(1));
@@ -196,8 +211,26 @@ function analyze(fileList, setImagesInfoDict, pictureCountRef) {
     Orientation.push(file.Orientation);
   }
 
+  const currentTimestamp = Date.now(); // Current timestamp in UTC
+  let localDateTime = new Date(currentTimestamp).toLocaleString('en-US', {
+    timeZone: moment.tz.guess(),
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+
+  localDateTime = moment(localDateTime, 'MM/DD/YYYY, hh:mm:ss A').format('YYYY-MM-DD HH:mm:ss');
+  
+
+
   // 計算各個 list 中元素出現的次數
   let newImagesInfo = {
+    total: total,
+    Make: Array.from(new Set(Make)),
+    AnalysisDate: localDateTime,
     FocalLength: counting(FocalLength),
     FocalLengthIn35mmFormat: counting(FocalLengthIn35mmFormat),
     Aperture: sortDict(counting(Aperture)),
@@ -226,253 +259,49 @@ function analyze(fileList, setImagesInfoDict, pictureCountRef) {
 }
 
 
-function AnalysisOverview({fileList, imagesInfoDict, chartInlineStyle}) {
-  // 計算照片拍攝的橫跨日期
-  function CalculateDate() {
-    let startTimestamp = 0;
-    let endTimestamp = 0;
-    let startDate = 'None';
-    let endDate = 'None';
-
-    if (fileList.length === 0) {
-      return [startDate, endDate];
-    }
-
-    if (fileList.length !== 0) {
-      startTimestamp = Math.min(...imagesInfoDict.CreateDate);
-      endTimestamp = Math.max(...imagesInfoDict.CreateDate);
-    }
-
-    startDate = new Date(startTimestamp * 1000).toLocaleDateString();
-    endDate = new Date(endTimestamp * 1000).toLocaleDateString();
-    return [startDate, endDate];
-  }
-
-  // 計算最常使用的鏡頭
-  function CalculateLensModel() {
-    let maxLensModel = 'None';
-    if (fileList.length !== 0) {
-      let lensModel = Object.keys(imagesInfoDict.LensModel);
-      let lensModelCount = Object.values(imagesInfoDict.LensModel);
-      let maxCount = Math.max(...lensModelCount);
-      maxLensModel = lensModel[lensModelCount.indexOf(maxCount)];
-    }
-    return maxLensModel;
-  }
-
-  // 計算最常使用的焦距
-  function CalculateFocalLength() {
-    if (fileList.length !== 0) {
-      let focalLength = Object.keys(imagesInfoDict.FocalLength);
-      let focalLengthCount = Object.values(imagesInfoDict.FocalLength);
-      let maxCount = Math.max(...focalLengthCount);
-      let maxFocalLength = focalLength[focalLengthCount.indexOf(maxCount)];
-      return maxFocalLength;
-    }
-  }
-
-  // 計算最常使用的攝影角度
-  function CalculateOrientation() {
-    let maxOrientation = 'None';
-    if (fileList.length !== 0) {
-      let orientation = Object.keys(imagesInfoDict.Orientation);
-      let orientationCount = Object.values(imagesInfoDict.Orientation);
-      let maxCount = Math.max(...orientationCount);
-      maxOrientation = orientation[orientationCount.indexOf(maxCount)];
-    }
-
-    if (maxOrientation === '1') {
-      maxOrientation = 'Horizontal';
-    }
-
-    if (maxOrientation === '8') {
-      maxOrientation = 'Vertical';
-    }
-
-    return maxOrientation;
-  }
-
-  let [startDate, endDate] = CalculateDate();
-  let maxLensModel = CalculateLensModel();
-  let maxFocalLength = CalculateFocalLength();
-  let maxOrientation = CalculateOrientation();
-
-  // 如果沒有上傳照片，顯示 No Data
-  if (fileList.length === 0) {
-    return (
-      <div className='analysis-overview-info'>
-        <p>No Data</p>
-      </div>
-    )
-  }
-
-  // 如果有上傳照片，顯示分析結果
-  return(
-    <div className='row w-100 analysis-overview' style={chartInlineStyle}>
-      <div className='col-4 center-all'>
-        <div>
-          <p className='photo-count mb-0'>{fileList.length}</p>
-          <p className='mb-0'>photos</p>
-          <button className="btn btn-outline-light save-button" data-bs-toggle="modal" data-bs-target="#signInUpModal"> Save </button>
-        </div>
-      </div>
-      <div className='analysis-overview-info col-8'>
-        <p className=''>Date: <span className='bold'>{startDate} ~ {endDate}</span></p>
-        <p className=''>Most used lens: <span className='bold'>    {maxLensModel}</span></p>
-        <p className=''>Most used focal length: <span className='bold'>{maxFocalLength} mm</span></p>
-        <p className=''>Most shoot orientation: <span className='bold'>{maxOrientation}</span></p>
-      </div>
-    </div>
-  )
-};
-
-
-
-
-
-function Dashboard(){
-  const { fileList, imagesInfoDict, barChartRef, switcherRef} = useContext(Context);
-  const [ isSwitchChart, setSwitchChart ] = useState(false);
-
-  // 切換圖表
-  function handleChartSwitch() {
-    setSwitchChart(!isSwitchChart);
-
-    // 點擊切換圖表的變化
-    if (switcherRef.current) {
-      switcherRef.current.classList.add('pulse');
-    }
-
-    // 400ms 後移除動畫
-    setTimeout(() => {
-      if (switcherRef.current) {
-        switcherRef.current.classList.remove('pulse');
-      }
-    }, 400);
-  }
-
-
-  // 將圓餅圖的高度和長條圖的高度同步
-  let chartInlineStyle = {};
-  if (fileList.length !== 0) {
-    chartInlineStyle = {
-      height: barChartRef.current.clientHeight
-    }
-  }
-
- 
-  return (
-    <div className="container-fluid">
-      <div className='chart-switcher' onClick={handleChartSwitch}>
-        <i className="bi bi-three-dots"></i>
-      </div>
-      <div className='switcher-decoration center-all' ref={switcherRef}>
-        <div className='circle-1 switcher-decoration '/>
-        <div className='circle-2 switcher-decoration '/>
-        <div className='circle-3 switcher-decoration '/>
-      </div>
-      <div className='row w-100 h-10'></div>
-      <div className='row w-100 h-40 gx-5'>
-        <div className='col-5 ms-auto center-all'>
-          <AnalysisOverview
-          fileList={fileList}
-          imagesInfoDict={imagesInfoDict}
-          chartInlineStyle={chartInlineStyle}
-          />
-        </div>
-        <div className='col-5 me-auto center-all'>
-          {isSwitchChart ? 
-            <div className='pie-chart center-all' style={chartInlineStyle}>
-              <PieChart
-              Context={Context}
-              dataDict={imagesInfoDict.LensModel}
-              name={'LensModel'}
-              />
-            </div> 
-            : 
-            <BarChart
-            Context={Context}
-            dataDict={imagesInfoDict.ShutterSpeed}
-            backgroundColor={'rgb(99, 255, 132)'}
-            name={'ShutterSpeed'}
-            />
-          }
-        </div>
-      </div>
-      <div className='row w-100 h-40 gx-5'>
-        <div className='col-5 ms-auto center-all' ref={barChartRef}>
-          {isSwitchChart ?
-            <BarChart 
-            Context={Context}
-            dataDict={imagesInfoDict.FocalLength} 
-            backgroundColor={'rgb(255, 198, 99)'}
-            name={'FocalLength'}
-            />
-            :
-            <BarChart 
-            Context={Context}
-            dataDict={imagesInfoDict.Aperture} 
-            backgroundColor={'rgb(255, 99, 132)'}
-            name={'Apeture'}/>
-          }
-        </div>
-        <div className='col-5 me-auto center-all'>
-          {isSwitchChart ?
-            <BarChart 
-            Context={Context}
-            dataDict={imagesInfoDict.FocalLengthIn35mmFormat} 
-            backgroundColor={'rgb(247, 242, 107)'}
-            name={'FocalLength in 35mm format'}
-            />
-            :
-            <BarChart 
-            Context={Context}
-            dataDict={imagesInfoDict.ISO} 
-            backgroundColor={'rgb(247, 242, 107)'}
-            name={'ISO'}
-            />
-          }
-          
-        </div>
-      </div>
-      <div className='row w-100 h-10'></div>
-    </div>
-  );
-}
-
-
 // page component
 function AnalysisPage() {
   const [fileList, setFileList] = useState([]); // 用來存上傳的檔案
   const [imagesInfoDict, setImagesInfoDict] = useState({}); // 用來存分類好的 metadata
+  const [hasData, setHasData] = useState(false); // 用來判斷是否有資料
   const [section, setSection] = useState('dashboard'); // 用來切換頁面
+  const [isSaved, setIsSaved ] = useState(false); // 用來判斷是否按過 save 按鈕
+  
 
   const arrowRef = useRef(null);
   const pictureCountRef = useRef(null);
   const barChartRef = useRef(null);
 
   const uploadRef = useRef(null);
-  const dashboardRef = useRef(null);
+  const { dashboardRef } = useContext(AllPageContext);
   const switcherRef = useRef(null);
   
+  const saveButttonRef = useRef(null);
 
   const contextValue = {
     fileList, setFileList, 
     imagesInfoDict, setImagesInfoDict,
+    hasData, setHasData,
+    isSaved, setIsSaved,
     pictureCountRef,
     barChartRef,
     uploadRef,
     dashboardRef,
     switcherRef,
+    saveButttonRef
   }
 
   useEffect(() => {
     // console.log(fileList);
     analyze(fileList, setImagesInfoDict, pictureCountRef);
+    if (fileList.length !== 0){
+      setHasData(true);
+    }
   }, [fileList]);
 
   useEffect(() => {
-    // console.log(imagesInfoDict);
+    console.log(imagesInfoDict);
+    // console.log(JSON.stringify(imagesInfoDict).length);
   }, [imagesInfoDict]);
 
 
@@ -526,12 +355,6 @@ function AnalysisPage() {
   }, []);
 
 
-  // if (fileList.length === 0) {
-  //   dashboardRef.current?.classList.add('blur');
-  // } else {
-  //   dashboardRef.current?.classList.remove('blur');
-  // }
-
   // 切換 section
   const handleSectionChange = (e) => {
     // console.log(section);
@@ -562,7 +385,7 @@ function AnalysisPage() {
 
   return (
     <Layout>
-      <Context.Provider value={contextValue}>
+      <analysisContext.Provider value={contextValue}>
         <div className="container-fluid">
             <section id="upload" ref={uploadRef} className='pageBlock upload'>
               <div className="squares-placer">
@@ -587,52 +410,28 @@ function AnalysisPage() {
               <div className="blur-mask center-all">
                 <h5 className='mb-0'> Hey, mind uploading the images? Then swing back here. Thanks! </h5>
               </div>}
-              <Dashboard/>
-              <Modal/>
+              <div id="carouselExampleControls" className="carousel slide" data-bs-ride="false">
+                <div className="carousel-inner">
+                  <div className="carousel-item active">
+                    <Dashboard/>
+                  </div>
+                  <div className="carousel-item">
+                    <RecommendationBlock/>
+                  </div>
+                </div>
+                <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+              </div>
             </section>
+            <Modal/>
         </div>
-      </Context.Provider>
+      </analysisContext.Provider>
     </Layout>
   )
 }
 
 export default AnalysisPage
-
-
-
-
-
-
-
-{/* <section id="dashboard" ref={dashboardRef} className='' >
-  <div id="carouselExample" className="carousel slide pageBlock dashboard">
-    <div className="carousel-inner">
-      <div className="carousel-item active">
-          {fileList.length === 0 && 
-        <div className="blur-mask center-all">
-          <h5 className='mb-0'> Hey, mind uploading the images? Then swing back here. Thanks! </h5>
-        </div>}
-        <Dashboard/>
-      </div>
-      <div className="carousel-item">
-        <h1>test</h1>
-      </div>
-    </div>
-    <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span className="visually-hidden">Previous</span>
-    </button>
-    <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-      <span className="visually-hidden">Next</span>
-    </button>
-  </div>
-</section> */}
-
-
-// Decoration component
-function DecorationSquare() {
-  return (
-    <div className="decoration-square square-box center-all"/>
-  );
-}
