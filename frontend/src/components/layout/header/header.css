@@ -28,3 +28,23 @@
 .link:hover{
   color: #a9a7a7;
 }
+
+
+.sign-in-up {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e8e8e8;
+
+  font-size: 15px;
+
+  margin-left: auto;
+  margin-right: 5vh;
+
+  border: none;
+  background: none;
+}
+
+.sign-in-up:hover {
+  color: #a9a7a7;
+}

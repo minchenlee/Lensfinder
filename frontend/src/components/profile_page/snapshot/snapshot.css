@@ -1,0 +1,25 @@
+
+
+.snapcircle-box{
+  margin-left: 1vh;
+  margin-right: 1vh;
+  height: 250px;
+  width: 250px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* background-color: rgb(90, 125, 124, 0.8); */
+  cursor: pointer;
+}
+
+
+.glass-light {
+  background: linear-gradient(135deg, rgba(64, 64, 64, 0.1), rgba(0, 0, 0, 0.15));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border:1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 25px;
+}

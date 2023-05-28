@@ -1,7 +1,7 @@
 import Header from "./header/header"
 
 
-const Layout = ({ children }) => {
+function Layout({ children }){
   return( 
   <>
     <Header />
