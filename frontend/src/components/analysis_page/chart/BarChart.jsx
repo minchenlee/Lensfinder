@@ -13,10 +13,8 @@ import { Chart as ChartJS,
 import { Pie, Bar } from 'react-chartjs-2';
 
 // BarChart
-function BarChart( {Context, dataDict, backgroundColor, name} ) {
-  const { fileList } = useContext(Context);
-
-  if (fileList.length === 0) {
+function BarChart( {dataDict, backgroundColor, name} ) {
+  if (dataDict === undefined || Object.keys(dataDict).length === 0) {
     return (
       <div className="center-all">
         <div>

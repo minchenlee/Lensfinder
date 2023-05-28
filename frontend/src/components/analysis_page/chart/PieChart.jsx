@@ -13,22 +13,10 @@ import { Chart as ChartJS,
 import { Pie, Bar } from 'react-chartjs-2';
 
 // Pie Chart component
-function PieChart( {Context, dataDict, name} ) {
-  const { fileList } = useContext(Context);
-
-  if (fileList.length === 0) {
+function PieChart( {dataDict, name} ) {
+  if (dataDict === undefined || Object.keys(dataDict).length === 0) {
     return (
       <div className="center-all">
-        <div>
-          <p className='mb-0'>No data</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (fileList.length === 0) {
-    return (
-      <div className="pie-chart square-box center-all">
         <div>
           <p className='mb-0'>No data</p>
         </div>
@@ -84,13 +72,6 @@ function PieChart( {Context, dataDict, name} ) {
           'rgba(255, 159, 64, 1)',
         ],
         borderWidth: 1,
-        // backgroundColor: 
-        //   [
-        //     '#A7E68C',
-        //     '#FFAC63',
-        //     '#FEC3A6',
-        //   ]
-        // ,
       },
     ],
   };

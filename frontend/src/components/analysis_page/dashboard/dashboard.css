@@ -1,0 +1,165 @@
+
+
+.analysis-overview {
+  font-size: 16px;
+  /* font-size: 1vw; */
+  font-family: "Source_Code_Pro";
+  font-weight: 500;
+}
+
+.photo-count{
+  /* font-size: 72px; */
+  font-size: 5vw;
+  font-weight: 800;
+}
+
+.analysis-overview-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: start;
+}
+
+.analysis-overview-info p{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.save-button {
+  width: 8vw;
+  margin-top: 2vh;
+  /* font-size: 16px !important; */
+  border-radius: 2vw !important;
+  animation-duration: 1s; 
+}
+
+
+.bold {
+  font-weight: 700;
+}
+
+.chart-switcher {
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  position: absolute;
+  top: auto;
+  left: auto;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: color 0.5s, background-color 0.5s;
+  font-size: 36px;
+  cursor: pointer;
+}
+
+
+.chart-switcher:hover{
+  color: #232323;
+  background-color: #e8e8e8;
+  transition: color 0.5s, background-color 0.5s;
+}
+
+.chart-switcher:active{
+  background-color: #5A7D7C;
+  transition: background-color 0.05s;
+}
+
+.switcher-decoration {
+  position: absolute;
+  top: auto;
+  left: auto;
+}
+
+.circle-1 {
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  z-index: 9;
+  background-color: #6d8d8c;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.circle-2 {
+  width: 115px;
+  height: 115px;
+  border-radius: 100px;
+  z-index: 8;
+  background-color: #7da1a0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.circle-3 {
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  z-index: 7;
+  background-color: #a0baba4d;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.pulse .circle-1 {
+  background-color: #6d8d8c;
+  opacity: 0.7;
+  transition: opacity 0.3s ease-out;
+}
+
+.pulse .circle-2 {
+  background-color: #6d8d8c;
+  opacity: 0.3;
+  transition: opacity 0.4s ease-out;
+}
+
+.pulse .circle-3 {
+  background-color: #6d8d8c;
+  opacity: 0.2;
+  transition: opacity 0.4s ease-out;
+}
+
+
+
+
+@media screen and (max-width: 1112px){
+  .analysis-overview-info {
+    font-size: 13px;
+  }
+
+  .analysis-overview-info p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .save-button {
+    width: 16vw;
+    margin-top: 2vh;
+    border-radius: 4vw !important;
+  }
+
+  .analysis-overview{
+    margin-top: 30px !important;
+    margin-bottom: 30px;
+  }
+
+  .analysis-overview-info {
+    font-size: 13px;
+  }
+
+  .analysis-overview-info p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .chart-switcher{
+    right: 10px;
+  }
+
+  .switcher-decoration{
+    display: none;
+  }
+}
