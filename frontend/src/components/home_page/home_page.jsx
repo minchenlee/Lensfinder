@@ -5,7 +5,7 @@ import Layout from '../layout/layout'
 function HomePage() {
   return (
     <Layout>
-      <div className="container">
+      <div className="home-page-container">
         <div className="">
           <div className="col">
             <h1>Home Page</h1>
