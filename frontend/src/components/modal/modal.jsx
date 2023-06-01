@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef} from "react";
-import { post, authorize_post } from '../../api'; // 引入 api.jsx
+import { post, authorize_post, del } from '../../api'; // 引入 api.jsx
 import "./modal.css";
 import { AllPageContext } from "../../App.jsx";
 import * as bootstrap from 'bootstrap'
@@ -258,6 +258,61 @@ function SaveNamingModal() {
   )
 }
 
+
+
+// 刪除確認 modal
+function DeleteConfirmModal(){
+  let Context = profileContext;
+  if (window.location.pathname === '/analysis') {
+    Context = analysisContext;
+  } 
+
+  const {imagesInfoDict, deleteSnapshot} = useContext(Context);
+  const deleteModalRef = useRef(null);
+
+  // console.log(deleteSnapshot);
+  
+
+  async function handleYes(){
+    const JWT = localStorage.getItem('lensFinderToken');
+    const deleteSnapshotId = deleteSnapshot.id
+    await del('snapshot', JWT, `?snapshot_id=${deleteSnapshotId}`)
+    window.location.reload();
+  }
+
+  // 關閉 modal
+  async function handleNo(){
+    const modal = bootstrap.Modal.getInstance(deleteModalRef.current);
+    modal.hide();
+  }
+
+  return (
+  <div className="modal fade" id="deleteConfirmModal" tabIndex="-1" aria-labelledby="ModalLabelSucess" aria-hidden="true" ref={deleteModalRef}>
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="signInUpModal">
+        <div className="modal-body center-all">
+          <div className="SIUM-modal-body">
+            <h6 className="m-0">Delete this snapshot?</h6>
+            {deleteSnapshot && 
+              <p className="mt-2 mb-4">{deleteSnapshot.snapshot_name}</p>
+            }
+            <div className="row w-50">
+              <div className="col-6">
+                <button className="btn btn-outline-light w-100" onClick={handleYes}> Yes </button>
+              </div>
+              <div className="col-6">
+                <button className="btn btn-outline-light w-100" onClick={handleNo}> No </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  )
+}
+
+
 function Modal() {
   return (
     <div>
@@ -274,6 +329,7 @@ function Modal() {
       <AccountModal text={'Sign Up'} id={"signUpModal"} endpoint={'signUp'}/>
       <SucessModal/>
       <SaveNamingModal/>
+      <DeleteConfirmModal/>
     </div>
   )
 }
