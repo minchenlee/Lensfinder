@@ -81,7 +81,7 @@ function AnalysisOverview({hasData, isAnalysisPage, imagesInfoDict, chartInlineS
       maxOrientation = 'Horizontal';
     }
 
-    if (maxOrientation === '8') {
+    if (maxOrientation === '8' || maxOrientation === '6') {
       maxOrientation = 'Vertical';
     }
 
@@ -98,30 +98,6 @@ function AnalysisOverview({hasData, isAnalysisPage, imagesInfoDict, chartInlineS
   if (startDate === endDate) {
     sameDate = true;
   }
-
-  // async function handleSave() {
-  //   if (!isSignedIn){
-  //     return;
-  //   }
-    
-  //   // 從這邊加入 save api 的程式碼
-  //   const data = imagesInfoDict;
-  //   // console.log(data);
-
-  //   const JWT = localStorage.getItem('lensFinderToken');
-  //   const responseData = await authorize_post('snapshot', JWT, data);
-  //   console.log(responseData);
-  //   setIsSaved(true);
-
-  //   // 加入 save button pulse 動畫
-  //   saveButttonRef.current.classList.add('animate__pulse');
-
-  //   // 1000ms 後移除動畫
-  //   setTimeout(() => {
-  //     saveButttonRef.current.classList.remove('animate__pulse');
-  //   }
-  //   , 1000);
-  // }
 
   // 判斷是在 analysis page 還是 profile page
   let Context = profileContext;
@@ -231,7 +207,6 @@ function Dashboard(){
           isAnalysisPage={isAnalysisPage}
           hasData={hasData}
           imagesInfoDict={imagesInfoDict}
-          chartInlineStyle={chartInlineStyle}
           />
         </div>
         <div className='col-sm-5 me-auto center-all'>
