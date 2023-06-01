@@ -4,6 +4,7 @@ import Layout from '../layout/layout'
 
 import { authorize_get } from '../../api'
 
+import RecommendationBlock from '../recommendation_block/recommendation_block'
 import Dashboard from '../analysis_page/dashboard/dashboard'
 import Modal from '../modal/modal'
 
@@ -21,8 +22,8 @@ export { profileContext };
 
 
 function SnapshotBlock({imagesInfoList}){
-  const {hasData, setImagesInfoDict} = useContext(profileContext);
-  console.log(imagesInfoList.length)
+  const {hasData, setImagesInfoDict, setdeleteSnapshot} = useContext(profileContext);
+  // console.log(imagesInfoList.length)
 
   if (imagesInfoList.length === undefined) {
     return;
@@ -36,6 +37,7 @@ function SnapshotBlock({imagesInfoList}){
             <Snapshot key={imageInfoDict.id} id={index}
             imageInfoDict={imageInfoDict} imagesInfoList={imagesInfoList}
             setImagesInfoDict={setImagesInfoDict}
+            setdeleteSnapshot = {setdeleteSnapshot}
             />
           )
         })
@@ -52,6 +54,8 @@ function ProfilePage() {
   const [hasData, setHasData] = useState(false); // 用來判斷是否有資料
   const [section, setSection] = useState('dashboard'); // 用來切換頁面
   const [isSaved, setIsSaved ] = useState(false); // 用來判斷是否按過 save 按鈕
+  const [deleteSnapshot, setdeleteSnapshot] = useState(null); // 用來刪除 snapshot
+
   const { isSignedIn, setIsSignedIn } = useContext(AllPageContext);
 
   const arrowRef = useRef(null);
@@ -71,6 +75,7 @@ function ProfilePage() {
     hasData, setHasData,
     section, setSection,
     isSaved, setIsSaved,
+    deleteSnapshot, setdeleteSnapshot,
     pictureCountRef,
     barChartRef,
     profileRef,
@@ -80,7 +85,7 @@ function ProfilePage() {
   }
 
   useEffect(() => {
-    console.log(imagesInfoDict)
+    // console.log(imagesInfoDict)
   }, [imagesInfoDict])
 
   // 讓 arrow 自動隨著頁面位置翻轉
@@ -150,6 +155,8 @@ function ProfilePage() {
         const JWT = localStorage.getItem('lensFinderToken');
         const result = await authorize_get('snapshot', JWT);
 
+        // console.log(result);
+
         setImagesInfoList(result);
         setImagesInfoDict(result[0].analysis_result);
         setHasData(true);
@@ -188,7 +195,22 @@ function ProfilePage() {
           </section>
           {(isSignedIn && hasData) &&
             <section id='dashboard' ref={dashboardRef} className='dashboard' >
-              <Dashboard/>
+              <div id="dashboardCarousel" className="carousel slide" data-bs-ride="false">
+                <div className="carousel-inner">
+                  <div className="carousel-item active">
+                    <Dashboard/>
+                  </div>
+                  <div className="carousel-item vh-100 overflow-scroll">
+                    <RecommendationBlock/>
+                  </div>
+                </div>
+                <button className="carousel-control-prev" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="prev">
+                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="next">
+                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+              </div>
             </section>
           }
           <Modal/>
