@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://52.199.147.207';
+const API_BASE_URL = 'https://52.199.147.207';
+// const API_BASE_URL = 'http://52.199.147.207';
 // const API_BASE_URL = 'http://localhost:3001';
 
 const API_Version = '/api/1.0/';
