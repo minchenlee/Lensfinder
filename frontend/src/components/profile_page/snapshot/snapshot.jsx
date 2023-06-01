@@ -9,14 +9,16 @@ let scroller = Scroll.scroller;
 
 import './snapshot.css'
 
+import { del } from '../../../api'
 
 
 
-
-function Snapshot({id, imageInfoDict, imagesInfoList, setImagesInfoDict}){
-  console.log(imageInfoDict)
+function Snapshot({
+  id, imageInfoDict, imagesInfoList, 
+  setImagesInfoDict, setdeleteSnapshot}){
+  // console.log(imageInfoDict)
   let analysis_result = imageInfoDict.analysis_result;
-  console.log(analysis_result)
+  // console.log(analysis_result)
 
   // 計算照片拍攝的橫跨日期
   function CalculateDate() {
@@ -75,26 +77,35 @@ function Snapshot({id, imageInfoDict, imagesInfoList, setImagesInfoDict}){
     setImagesInfoDict(imagesInfoList[id].analysis_result);
 
     scroller.scrollTo('dashboard', {
-      duration: 1000,
-      delay: 50,
+      duration: 500,
       smooth: 'easeInQuad',
     });
   }
 
+  async function handleDelete(){
+    // console.log('delete');
+    // console.log(imagesInfoList[id].id);
+    setdeleteSnapshot(imagesInfoList[id]);
+  }
+
   useEffect(() => {
-    console.log(imageInfoDict)
+    // console.log(imageInfoDict)
   }, [imageInfoDict])
 
 
   return (
-    <div className='snapcircle-box glass-light' onClick={handleClick}>
-      <h5 className='mb-1'> {snapshotName} </h5>
-      <h5 className=' mb-3'>{total} Photos</h5>
-      <p className=' mb-0'>Most used: {maxFocalLength}mm({maxFocalLength35}mm)</p>
-      {
-        sameDate ? <p className='mb-0'>{startDate}</p> : <p className='mb-0'>{startDate}~{endDate}</p>
-      }
+    <div className='snapcard-box' >    
+      <div className='snapcard glass-light' onClick={handleClick}>
+        <h5 className='mb-1 snapshot-name'> {snapshotName} </h5>
+        <h5 className=' mb-3 snapshot-photo-num'>{total} Photos</h5>
+        <p className=' mb-0'>Most used: {maxFocalLength}mm({maxFocalLength35}mm)</p>
+        {
+          sameDate ? <p className='mb-0'>{startDate}</p> : <p className='mb-0'>{startDate}~{endDate}</p>
+        }
+      </div>
+      <i className="bi bi-trash2 snapshot-delete-button" onClick={handleDelete} data-bs-target="#deleteConfirmModal" data-bs-toggle="modal"></i>
     </div>
+
   );
 }
 

@@ -71,6 +71,7 @@ function DragDrop() {
   const { setFileList, pictureCountRef, setIsSaved } = useContext(analysisContext);
 
   async function handleChange(files) {
+
     // 解析多張圖片
     const isFailed = await ParseMultiplePicture(files, setFileList, pictureCountRef);
     if (isFailed) {
@@ -200,11 +201,22 @@ function analyze(fileList, setImagesInfoDict, pictureCountRef) {
 
   // 將資料存入各個 list
   for (const file of fileList) {
+    let ShutterSpeedValue;
+
+    // 計算快門速度，如果快門速度小於 1 秒，則轉換成分數
+    if (file.ExposureTime < 1) {
+      ShutterSpeedValue = Math.round(1/file.ExposureTime);
+    }
+    // } else {
+    //   // 計算快門速度，如果快門速度大於 1 秒，則轉換成秒數
+    //   ShutterSpeedValue = file.ExposureTime;
+    // }
+
     Make.push(file.Make);
     FocalLength.push(Math.round(file.FocalLength));
     FocalLengthIn35mmFormat.push(Math.round(file.FocalLengthIn35mmFormat));
     Aperture.push(file.ApertureValue.toFixed(1));
-    ShutterSpeed.push(1/file.ExposureTime);
+    ShutterSpeed.push(ShutterSpeedValue);
     ISO.push(file.ISO);
     CreateDate.push(file.CreateDate);
     LensModel.push(file.LensModel);
@@ -300,7 +312,7 @@ function AnalysisPage() {
   }, [fileList]);
 
   useEffect(() => {
-    console.log(imagesInfoDict);
+    // console.log(imagesInfoDict);
     // console.log(JSON.stringify(imagesInfoDict).length);
   }, [imagesInfoDict]);
 
@@ -410,19 +422,19 @@ function AnalysisPage() {
               <div className="blur-mask center-all">
                 <h5 className='mb-0'> Hey, mind uploading the images? Then swing back here. Thanks! </h5>
               </div>}
-              <div id="carouselExampleControls" className="carousel slide" data-bs-ride="false">
+              <div id="dashboardCarousel" className="carousel slide" data-bs-ride="false">
                 <div className="carousel-inner">
                   <div className="carousel-item active">
                     <Dashboard/>
                   </div>
-                  <div className="carousel-item">
+                  <div className="carousel-item vh-100 overflow-scroll">
                     <RecommendationBlock/>
                   </div>
                 </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <button className="carousel-control-prev" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="prev">
                   <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                 </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <button className="carousel-control-next" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="next">
                   <span className="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
               </div>

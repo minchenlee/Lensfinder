@@ -18,7 +18,16 @@ async function insertNewRecords( userId, snapshotName, createDate, analysisResul
   return insertResult[0];
 };
 
+async function deleteRecords( userId, snapshotId ){
+  const promise_pool = pool.promise();
+  const SQL = `\
+  DELETE FROM Analysis_Records WHERE user_id = ? AND id = ?;`;
+  deleteResult = await promise_pool.query(SQL, [userId, snapshotId]);
+  return deleteResult[0];
+};
+
 module.exports = { 
   getRecordsInfo: getRecordsInfo,
   insertNewRecords: insertNewRecords,
+  deleteRecords: deleteRecords,
 };

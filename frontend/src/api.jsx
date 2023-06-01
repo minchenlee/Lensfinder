@@ -1,12 +1,12 @@
+const API_BASE_URL = 'http://52.199.147.207';
+// const API_BASE_URL = 'http://localhost:3001';
 
-const API_BASE_URL = 'http://52.199.147.207'; // Replace with your API base URL
-// const API_BASE_URL = 'http://localhost:3001'; 
 const API_Version = '/api/1.0/';
 
 // Function to make an HTTP GET request
-export async function get(endpoint) {
+export async function get(endpoint, parms) {
   try {
-    const response = await fetch(`${API_BASE_URL}${API_Version}${endpoint}`);
+    const response = await fetch(`${API_BASE_URL}${API_Version}${endpoint}${parms}`);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -87,11 +87,14 @@ export async function put(endpoint, body) {
   }
 };
 
-// Function to make an HTTP DELETE request
-export async function del(endpoint){
+
+export async function del(endpoint, JWT, parms){
   try {
-    const response = await fetch(`${API_BASE_URL}${API_Version}${endpoint}`, {
+    const response = await fetch(`${API_BASE_URL}${API_Version}${endpoint}${parms}`, {
       method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${JWT}`
+      },
     });
     const data = await response.json();
     return data;

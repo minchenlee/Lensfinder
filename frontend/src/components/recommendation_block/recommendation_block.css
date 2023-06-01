@@ -1,0 +1,215 @@
+
+.recommendation-container{
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  padding-left: 10%;
+  padding-right: 10%;
+  
+}
+
+.recommendation-button-placer{
+  height: 100%;
+  width: 100%;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recommendation-button{
+  font-size: 18px;
+  border: none;
+  color: rgb(232, 232, 232, 1);
+
+  height: 25vw;
+  width: 25vw;
+
+  min-height: 300px;
+  min-width: 300px;
+
+  max-height: 900px;
+  max-width: 900px;
+
+  border-radius: 1000px !important;
+  background-image: url('../../../images/upload-background-6.jpg');
+  background-repeat: no-repeat;
+  background-size: auto 1300px;
+  background-position: 85% 85%;
+  transition: height 0.6s ease-in-out, width 0.6s ease-in-out, 
+  background-size 0.6s ease-in-out, color 0.6s ease-in-out;
+}
+
+.recommendation-button:hover {
+  color: rgb(232, 232, 232, 0.5);
+
+  height: 45vw;
+  width: 45vw;
+
+  background-size: auto 900px;
+
+  transition: height 0.6s ease-in-out, width 0.6s ease-in-out, 
+  background-size 0.6s ease-in-out, color 0.6s ease-in-out;
+}
+
+
+.recommendation-block{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.sort-selector{
+  width: 100%;
+  min-width: 300px;
+
+  padding-left: 14%;
+  padding-right: 14%;
+
+  display: flex;
+  justify-content: space-between;
+  
+  margin-bottom: 40px;
+}
+
+.selector-group{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.sort-button{
+  border-radius: 20px !important;
+}
+
+.sort-button:focus{
+  color: #e8e8e8 !important;
+  background-color: #6d8d8c !important;
+  border: 1px solid #6d8d8c !important;
+}
+
+.sort-type{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.currency-menu{
+  height: 400px;
+  overflow: scroll;
+
+  text-align: center !important;
+}
+
+.dropdown-item{
+  cursor: pointer;
+}
+
+.dropdown-item:hover{
+  background-color: #7da1a09d !important;
+}
+
+.dropdown-item:active{
+  background-color: #6d8d8c !important;
+  color: #ffffff;
+}
+
+
+.recommendation-list{
+  display: flex;
+  flex-wrap: wrap;
+
+  padding-left: 12%;
+  padding-right: 12%;
+  /* justify-content: center; */
+}
+
+
+.recommendation-card{
+  /* height: 250px; */
+  /* width: 250px; */
+  /* min-width: 253px; */
+  width: 29.3%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+
+  border-radius: 25px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.recommendation-card:hover{
+  transform: scale(1.05);
+  transition: transform color 0.3s ease-in-out;
+}
+
+.card-image{
+  width: 100%;
+  opacity: 0.36;
+  transition: opacity 0.3s ease-in-out;
+
+  border-radius: 15px;
+}
+
+
+.card-image:hover{
+  opacity: 0.9;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.recommendation-card a{
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+.lens-text{
+  font-family: 'Source_Code_Pro';
+  font-weight: 500;
+  font-size: 17px;
+  color: #e8e8e8;
+
+  position: absolute;
+  top: 45%;
+  left: 0%;
+}
+
+/* .lens-price{
+  font-family: 'Source_Code_Pro';
+  font-size: 17px;
+} */
+
+
+.recommendation-card:hover p{
+  display: none;
+}
+
+
+.glass-light {
+  background-color: none !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px) !important;
+  border:1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 25px !important;
+}
+
+@media screen and (max-width: 834px){
+  .lens-text{
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 450px){
+  .recommendation-card{
+    min-width: 256px;
+  }
+}

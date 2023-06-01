@@ -10,6 +10,8 @@ let HealthCheckRouter = require('./routes/healthcheck');
 let signInRouter = require('./routes/account/sign_in');
 let signUpRouter = require('./routes/account/sign_up');
 let snapShotRouter = require('./routes/analysis/snapshot')
+let lensInfoRouter = require('./routes/analysis/lens_info')
+let exchangeRateRouter = require('./routes/exchange_rate')
 
 let app = express();
 
@@ -27,7 +29,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/healthcheck', HealthCheckRouter);
 app.use('/api/1.0/signIn', signInRouter);
 app.use('/api/1.0/signUp', signUpRouter);
-app.use('/api/1.0/snapshot', snapShotRouter)
+app.use('/api/1.0/snapshot', snapShotRouter);
+app.use('/api/1.0/lensInfo', lensInfoRouter);
+app.use('/api/1.0/exchangeRate', exchangeRateRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

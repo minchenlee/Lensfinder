@@ -2,7 +2,7 @@ const express = require('express');
 const { whetherEmailExists, getUserInfo } = require('../../model/user_model');
 const { generateJWT } = require('../account/jwt');
 const JWTValidate = require('../account/jwt_validation');
-const { getRecordsInfo, insertNewRecords } = require('../../model/analysis_records_model');
+const { getRecordsInfo, insertNewRecords, deleteRecords} = require('../../model/analysis_records_model');
 
 const router = express.Router();
 
@@ -46,6 +46,24 @@ router.post(('/'),
 
 
     } catch(error) {
+      console.error(error);
+      res.status(500).send({errorMessage: 'Internal Server Error!'});
+    }
+});
+
+
+router.delete(('/'),
+  JWTValidate,
+  async function(req, res, next) {
+    try{
+      const userId = res.locals.payload.id;
+      const snapshotId = req.query.snapshot_id;
+      const result = await deleteRecords(userId, snapshotId);
+
+      res.send({message: 'success'});
+      return
+    }
+    catch(error) {
       console.error(error);
       res.status(500).send({errorMessage: 'Internal Server Error!'});
     }
