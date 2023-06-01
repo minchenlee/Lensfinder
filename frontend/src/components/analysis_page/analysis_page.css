@@ -9,6 +9,8 @@
   align-items: center;
   flex-wrap: wrap;
   position: relative;
+
+  overflow: hidden;
 }
 
 .grid-container {
@@ -175,7 +177,12 @@
   }
 
   .squares-placer{
-    margin-top: 70px;
+    margin-top: 160px;
+    margin-bottom: 80px;
+  }
+
+  .carousel-control-prev, .carousel-control-next{
+    display: none !important;
   }
 }
 

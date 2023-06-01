@@ -20,10 +20,18 @@
   margin-left: 50px;
 }
 
+.nav-link-list{
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+
 .link{
   color: #ffffff;
   text-decoration: none;
 }
+
 
 .link:hover{
   color: #a9a7a7;
@@ -38,13 +46,53 @@
 
   font-size: 15px;
 
-  margin-left: auto;
-  margin-right: 5vh;
-
   border: none;
   background: none;
 }
 
+
 .sign-in-up:hover {
   color: #a9a7a7;
+}
+
+
+.menu-button{
+  font-size: 32px;
+
+  border: none;
+  background: none;
+  color: #e8e8e8;
+  margin-right: 5vh;
+}
+
+.menu-close{
+  font-size: 32px;
+  border: none;
+  background: none;
+  color: #e8e8e8;
+}
+
+.offcanvas{
+  color: #e8e8e8 !important;
+  background-color: #232323 !important;
+}
+
+@media screen and (max-width: 768px) {
+  .brand{
+    margin-left: 50px;
+    font-size: 15px;
+  }
+
+}
+
+@media screen and (max-width: 1141px) {
+  .desktop-nav{
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1140px) {
+  .menu-button{
+    display: none;
+  }
 }

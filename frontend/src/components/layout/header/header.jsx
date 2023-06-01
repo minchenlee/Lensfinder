@@ -16,32 +16,49 @@ function Header() {
 
   return( 
   <header className="fixed-top">
-    <nav className="navbar navbar-expand-lg grey-glass">
-      <Link className="brand link" to="/">LensFinder</Link>
-      <button className="navbar-toggler" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <Link className="link" to="/analysis">Analysis</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="link" to="/profile" >Profile</Link>
-          </li>
-        </ul>
+    <nav className="navbar grey-glass">
+      <div className='nav-link-list'>
+        <Link className="brand link me-2" to="/">LensFinder</Link>
+        <Link className="link ms-5 desktop-nav" to="/analysis">Analysis</Link>
+        <Link className="link ms-5 desktop-nav" to="/profile" >Profile</Link>
         {isSignedIn ?
-          <button className="sign-in-up" type="button" onClick={handleSignOut}>
+          <button className="sign-in-up ms-auto me-4 desktop-nav" type="button" onClick={handleSignOut}>
             Sign Out
           </button>
           :
-          <button className="sign-in-up" type="button" data-bs-toggle="modal" data-bs-target="#signInUpModal">
+          <button className="sign-in-up ms-auto me-4 desktop-nav" type="button" data-bs-toggle="modal" data-bs-target="#signInUpModal">
             Sign In/Up
           </button> 
         }
-       
+        <button className="menu-button ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+            <i className="bi bi-list"></i>
+        </button>
       </div>
     </nav>
+    <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight"  
+    aria-labelledby="offcanvasRightLabel">
+      <div className="offcanvas-header">
+        <button type="button" className="ms-auto menu-close" data-bs-dismiss="offcanvas" aria-label="Close">
+          <i className="bi bi-x"></i>
+        </button>
+      </div>
+      <div className="offcanvas-body">
+        <div className="nav-link-list flex-column">
+          <Link className="link my-3" to="/">Home</Link>
+          <Link className="link my-3" to="/analysis">Analysis</Link>
+          <Link className="link my-3" to="/profile">Profile</Link>
+          {isSignedIn ?
+            <button className="sign-in-up my-3" type="button" onClick={handleSignOut} data-bs-dismiss="offcanvas">
+              Sign Out
+            </button>
+            :
+            <button className="sign-in-up my-3" type="button" data-bs-toggle="modal" data-bs-target="#signInUpModal">
+              Sign In/Up
+            </button>
+          }
+        </div>
+      </div>
+    </div>
   </header>
   )
 }
