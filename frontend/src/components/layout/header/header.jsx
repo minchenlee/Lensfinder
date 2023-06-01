@@ -30,7 +30,7 @@ function Header() {
             Sign In/Up
           </button> 
         }
-        <button className="menu-button ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+        <button className="menu-button ms-auto me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
             <i className="bi bi-list"></i>
         </button>
       </div>
