@@ -34,7 +34,8 @@
   max-width: 900px;
 
   border-radius: 1000px !important;
-  background-image: url('../../../images/upload-background-6.jpg');
+  /* background-image: url('../../../images/upload-background-6.jpg'); */
+  background-image: url('https://lensfinder.s3.ap-northeast-1.amazonaws.com/images/upload-background-6.jpg');
   background-repeat: no-repeat;
   background-size: auto 1300px;
   background-position: 85% 85%;

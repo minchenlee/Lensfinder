@@ -63,7 +63,8 @@
 }
 
 .upload {
-  background-image: url('../../../images/upload-background.jpg');
+  /* background-image: url('../../../images/upload-background.jpg'); */
+  background-image: url('https://lensfinder.s3.ap-northeast-1.amazonaws.com/images/upload-background.jpg');
   background-repeat: no-repeat;
   background-size: auto 1400px;
   background-position: 10% 5%;

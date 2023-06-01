@@ -192,6 +192,10 @@ function SaveNamingModal() {
     Context = analysisContext;
   } 
 
+  if (window.location.pathname === '/') {
+    Context = AllPageContext;
+  }
+
   const {imagesInfoDict, setIsSaved} = useContext(Context);
   const modalRef = useRef(null);
 
@@ -266,6 +270,10 @@ function DeleteConfirmModal(){
   if (window.location.pathname === '/analysis') {
     Context = analysisContext;
   } 
+
+  if (window.location.pathname === '/') {
+    Context = AllPageContext;
+  }
 
   const {imagesInfoDict, deleteSnapshot} = useContext(Context);
   const deleteModalRef = useRef(null);
