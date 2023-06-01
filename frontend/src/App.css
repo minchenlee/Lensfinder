@@ -37,13 +37,13 @@
 @font-face {
   font-family: "LibreBaskerville-Regular";   /*Can be any text*/
   src: local("LibreBaskerville-Regular"),
-    url("./fonts/Libre_Baskerville/LibreBaskerville-Regular.ttf") format("truetype");
+    url("../public/fonts/Libre_Baskerville/LibreBaskerville-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Source_Code_Pro";   /*Can be any text*/
   src: local("Source_Code_Pro"),
-    url("./fonts/Source_Code_Pro/SourceCodePro-VariableFont_wght.ttf") format("truetype");
+    url("../public/fonts/Source_Code_Pro/SourceCodePro-VariableFont_wght.ttf") format("truetype");
 }
 
 
