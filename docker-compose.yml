@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  backend:
+    image: leeminchen/lensfinder-backend
+    restart: always
+    networks:
+      - lensfinder_network
+  frontend:
+    image: leeminchen/lensfinder-frontend
+    restart: always
+    networks:
+      - lensfinder_network
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    networks:
+      - lensfinder_network
+
+networks:
+  lensfinder_network:
+    driver: bridge
+ 

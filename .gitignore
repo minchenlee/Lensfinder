@@ -1,0 +1,4 @@
+.env
+.DS_Store
+action_secrect.yml
+node_modules
