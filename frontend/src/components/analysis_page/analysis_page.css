@@ -177,3 +177,9 @@
     margin-top: 70px;
   }
 }
+
+@media screen and (min-width: 2100px){
+  .upload {
+    background-size: auto 2100px;
+  }
+}
