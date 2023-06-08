@@ -56,6 +56,7 @@
 .intro-text-large{
   font-size: 50px;
   color: #ffffff;
+  transition: font-size 0.5s ease-in-out;
 }
 
 .intro-text-littel-large{
@@ -99,7 +100,7 @@
 
 .round-container{
   width: 100%;
-  height: 45%;
+  height: 43%;
   position: relative;
 
   z-index: 3;
@@ -136,9 +137,17 @@
 }
 
 
+.bi-arrow-right-circle:hover {
+  color: #d7d4d4;
+}
+
 .underline{
   text-decoration: underline;
   color: #e8e8e8;
+}
+
+.underline:hover{
+  color: #d7d4d4;
 }
 
 
@@ -153,6 +162,7 @@
 @media screen and (max-width: 1680px){
   .intro-text-large{
     font-size: 33px;
+    transition: font-size 0.5s ease-in-out;
   }
   
   .intro-text-littel-large{
@@ -168,6 +178,7 @@
 @media screen and (max-width: 1112px){
   .intro-text-large{
     font-size: 25px;
+    transition: font-size 0.5s ease-in-out;
   }
   
   .intro-text-littel-large{
@@ -187,6 +198,7 @@
 
   .intro-text-large{
     font-size: 20px;
+    transition: font-size 0.5s ease-in-out;
   }
   
   .intro-text-littel-large{

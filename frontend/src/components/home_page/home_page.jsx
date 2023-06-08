@@ -11,7 +11,7 @@ function Block({type, title, text, videoPath}){
     <div className={type}>
       <div className='row'>
         <div className='col-md-5 offset-md-1 intro-box'>
-          <video src={videoPath} type="video/mov" autoPlay={true}
+          <video src={videoPath} type="video/mp4" autoPlay={true}
           preload="true" loop={true} className="video" muted={true}/>
         </div>
         <div className='col-md-5 intro-box intro-box-text'>
@@ -44,7 +44,7 @@ function Block2({type, title, text, videoPath}){
           </div>
         </div>
         <div className='col-md-5 intro-box'>
-          <video src={videoPath} type="video/mov" autoPlay={true}
+          <video src={videoPath} type="video/mp4" autoPlay={true}
           preload="true" loop={true} className="video" muted={true}/>
         </div>
       </div>
@@ -59,7 +59,7 @@ function Block3({type, title, text, videoPath}){
     <div className={type}>
       <div className='row'>
         <div className='px-5 mb-4 col-md-5 offset-md-1 intro-box'>
-          <video src={videoPath} type="video/mov" autoPlay={true}
+          <video src={videoPath} type="video/mp4" autoPlay={true}
           preload="true" loop={true} className="video" muted={true}/>
         </div>
         <div className='col-md-5 intro-box intro-box-text'>
@@ -89,29 +89,29 @@ function HomePage() {
           type='home-page-block'
           title='LensFinder: Discover Your Photography Insights' 
           text='LensFinder simplifies the analysis process, providing you with valuable insights into your photography habits. With ease, upload your images and uncover the patterns that shape your unique style.'
-          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/upload-tutorial.mov'
+          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/upload-tutorial.mp4'
         />
         <Block2
           type='home-page-block-shorter glass-dark'
           title='Intuitive Dashboard: "Essentials at a Glance"'
           text='Our intuitive dashboard showcases the essentials: ISO, aperture, shutter speed, focal length, and lens model. It is a seamless blend of information, giving you a clearer picture of your photographic journey.'
-          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/dashboard-tutorial.mov'
+          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/dashboard-tutorial.mp4'
         />
         <Block
           type='home-page-block'
           title='Personalized Recommendations: "Elevate Your Photography Game"'
           text='LensFinder goes beyond data analysis. It empowers you with personalized lens recommendations based on your most frequently used focal length. Now, you can make informed choices to elevate your photography game.'
-          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/switchpage-tutorial.mov'
+          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/switchpage-tutorial.mp4'
         />
         <Block2
           type='home-page-block-shorter glass-dark'
           title='Saving and Revisiting: "Your Photography Archive"'
           text='Save and revisit each analysis effortlessly. LensFinder becomes your archive, allowing you to track your progress and reflect on your growth as a photographer.'
-          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/save-tutorial.mov'
+          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/save-tutorial.mp4'
         />
         <div className="home-page-block position-relative">
           <div className='round-container glass-dark '>
-            <p className='intro-text-littel-large mb-0'>Ready to Explore?</p>
+            <p className='intro-text-littel-large mb-0 mt-4'>Ready to Explore?</p>
             <p className='intro-text-normal text-start mb-0'>Unlock the hidden potential of your EXIF data with LensFinder. It's a practical companion that reveals new perspectives, empowering you to capture moments like never before.</p>
             <Link to="/analysis">
               <span><i className="bi bi-arrow-right-circle intro-text-large"></i></span>
@@ -126,31 +126,31 @@ function HomePage() {
           type='home-page-block'
           title='LensFinder: Discover Your Photography Insights' 
           text='LensFinder simplifies the analysis process, providing you with valuable insights into your photography habits. With ease, upload your images and uncover the patterns that shape your unique style.'
-          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/upload-tutorial.mov'
+          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/upload-tutorial.mp4'
         />
         <Block3
           type='home-page-block-shorter glass-dark'
           title='Intuitive Dashboard: "Essentials at a Glance"'
           text='Our intuitive dashboard showcases the essentials: ISO, aperture, shutter speed, focal length, and lens model. It is a seamless blend of information, giving you a clearer picture of your photographic journey.'
-          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/dashboard-tutorial.mov'
+          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/dashboard-tutorial.mp4'
         />
         <Block3
           type='home-page-block'
           title='Personalized Recommendations: "Elevate Your Photography Game"'
           text='LensFinder goes beyond data analysis. It empowers you with personalized lens recommendations based on your most frequently used focal length. Now, you can make informed choices to elevate your photography game.'
-          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/switchpage-tutorial.mov'
+          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/switchpage-tutorial.mp4'
         />
         <Block3
           type='home-page-block-shorter glass-dark'
           title='Saving and Revisiting: "Your Photography Archive"'
           text='Save and revisit each analysis effortlessly. LensFinder becomes your archive, allowing you to track your progress and reflect on your growth as a photographer.'
-          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/save-tutorial.mov'
+          videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/save-tutorial.mp4'
         />
         <div className="home-page-block position-relative">
           <div className='round-container glass-dark '>
             <p className='intro-text-littel-large mb-0'>Ready to Explore?</p>
             <p className='intro-text-normal text-start mb-0'>Unlock the hidden potential of your EXIF data with LensFinder. It's a practical companion that reveals new perspectives, empowering you to capture moments like never before.</p>
-            <Link to="/analysis">
+            <Link className='go-to-analysis-arrow' to="/analysis">
               <span><i className="bi bi-arrow-right-circle intro-text-large"></i></span>
             </Link>
             <p className='intro-text-normal text-start mb-3'>or see the&nbsp;
