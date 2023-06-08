@@ -110,11 +110,15 @@ function HomePage() {
           videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/save-tutorial.mov'
         />
         <div className="home-page-block position-relative">
-          <Link className='round-container glass-dark ' to="/analysis">
+          <div className='round-container glass-dark '>
             <p className='intro-text-littel-large mb-0'>Ready to Explore?</p>
             <p className='intro-text-normal text-start mb-0'>Unlock the hidden potential of your EXIF data with LensFinder. It's a practical companion that reveals new perspectives, empowering you to capture moments like never before.</p>
-            <i className="bi bi-arrow-right-circle intro-text-large"></i>
-          </Link>
+            <Link to="/analysis">
+              <span><i className="bi bi-arrow-right-circle intro-text-large"></i></span>
+            </Link>
+            <p className='intro-text-normal text-start mb-3'>or see the&nbsp;
+              <Link className='underline' to="demo">Demo.</Link></p>
+          </div>
         </div>
       </div>
       <div className="home-page-container mobile">
@@ -143,11 +147,15 @@ function HomePage() {
           videoPath='https://lensfinder.s3.ap-northeast-1.amazonaws.com/videos/save-tutorial.mov'
         />
         <div className="home-page-block position-relative">
-          <Link className='round-container glass-dark ' to="/analysis">
+          <div className='round-container glass-dark '>
             <p className='intro-text-littel-large mb-0'>Ready to Explore?</p>
             <p className='intro-text-normal text-start mb-0'>Unlock the hidden potential of your EXIF data with LensFinder. It's a practical companion that reveals new perspectives, empowering you to capture moments like never before.</p>
-            <i className="bi bi-arrow-right-circle intro-text-large"></i>
-          </Link>
+            <Link to="/analysis">
+              <span><i className="bi bi-arrow-right-circle intro-text-large"></i></span>
+            </Link>
+            <p className='intro-text-normal text-start mb-3'>or see the&nbsp;
+              <Link className='underline' to="demo">Demo.</Link></p>
+          </div>
         </div>
       </div>
       <Modal/>

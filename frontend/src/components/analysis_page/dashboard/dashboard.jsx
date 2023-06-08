@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef} from 'react';
 import { AllPageContext } from '../../../App.jsx';
 import { analysisContext } from '../analysis_page.jsx';
 import { profileContext } from '../../profile_page/profile_page.jsx';
+import { demoContext } from '../../demo_page/demo_page.jsx';
 import './dashboard.css';
 
 // 圖表
@@ -103,7 +104,11 @@ function AnalysisOverview({hasData, isAnalysisPage, imagesInfoDict, chartInlineS
   let Context = profileContext;
   if (isAnalysisPage) {
     Context = analysisContext;
-  } 
+  }
+
+  if (window.location.pathname === '/demo') {
+    Context = demoContext;
+  }
 
   const { isSignedIn, setIsSignedIn } = useContext(AllPageContext);
   const {isSaved, setIsSaved} = useContext(Context);
@@ -144,15 +149,17 @@ function AnalysisOverview({hasData, isAnalysisPage, imagesInfoDict, chartInlineS
 
 function Dashboard(){
   let isAnalysisPage = false;
-  if (window.location.pathname === '/analysis') {
-    isAnalysisPage = true;
-  }
 
   // 判斷是在 analysis page 還是 profile page
   let Context = profileContext;
-  if (isAnalysisPage) {
+  if (window.location.pathname === '/analysis') {
     Context = analysisContext;
-  } 
+    isAnalysisPage = true;
+  }
+  // 判斷是否在 demo 頁面
+  if (window.location.pathname === '/demo') {
+    Context = demoContext;
+  }
 
   const { 
     fileList, hasData,

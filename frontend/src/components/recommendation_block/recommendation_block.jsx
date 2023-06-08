@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef, createContext} from 're
 import { AllPageContext } from '../../App.jsx';
 import { analysisContext } from '../analysis_page/analysis_page.jsx';
 import { profileContext } from '../profile_page/profile_page.jsx';
+import { demoContext } from '../demo_page/demo_page.jsx';
 import './recommendation_block.css';
 import { get } from '../../api'// API
 
@@ -24,15 +25,16 @@ function RecommendationBlock(){
   }
 
   let isAnalysisPage = false;
+  let Context = profileContext;
+   // 判斷是在 analysis page 還是 profile page
   if (window.location.pathname === '/analysis') {
     isAnalysisPage = true;
+    Context = analysisContext;
   }
 
-  // 判斷是在 analysis page 還是 profile page
-  let Context = profileContext;
-  if (isAnalysisPage) {
-    Context = analysisContext;
-  } 
+  if (window.location.pathname === '/demo') {
+    Context = demoContext;
+  }
 
   const { 
     fileList, hasData,
@@ -65,7 +67,33 @@ function RecommendationBlock(){
     }
   }
 
-  function calculateDistance(maxFocalLength, lensinfo){
+
+  // 計算第二常使用的焦距
+  function calculateSecondFocalLength() {
+    if (hasData) {
+      // find the most frequent focal length
+      let focalLength = Object.keys(imagesInfoDict.FocalLength);
+      let focalLengthCount = Object.values(imagesInfoDict.FocalLength);
+      let maxCount = Math.max(...focalLengthCount);
+
+      // remove the most frequent focal length
+      let secondFocalLength = focalLength.filter((item) => {
+        return imagesInfoDict.FocalLength[item] !== maxCount;
+      });
+      let secondFocalLengthCount = secondFocalLength.map((item) => {
+        return imagesInfoDict.FocalLength[item];
+      });
+      
+      let secondMaxCount = Math.max(...secondFocalLengthCount);
+      let secondMaxFocalLength = secondFocalLength[secondFocalLengthCount.indexOf(secondMaxCount)];
+
+
+      return secondMaxFocalLength;
+    }
+  }
+
+  // 計算推薦鏡頭
+  function calculateDistanceByMaxFocal(maxFocalLength, lensinfo){
     // compute distance
     for (let i=0 ; i < Object.keys(lensinfo).length; i++){
       let lens_focalLength = parseInt(lensinfo[i].specification.focal_length);
@@ -75,15 +103,85 @@ function RecommendationBlock(){
     return lensinfo
   }
 
+
+  // 計算第二推薦鏡頭
+  function calculateDistanceBySecondMaxFocal(secondMaxFocalLength, lensinfo){
+    if (secondMaxFocalLength === undefined){
+      return lensinfo
+    }
+
+    // compute distance
+    for (let i=0 ; i < Object.keys(lensinfo).length; i++){
+      let lens_focalLength = parseInt(lensinfo[i].specification.focal_length);
+      let distance = Math.abs(lens_focalLength - secondMaxFocalLength);
+      lensinfo[i]['secondDistance'] = distance;
+    }
+    return lensinfo
+  }
+
+  // 考慮所有焦距的距離
+  function calculateDistanceByAllFocal(lensinfo){
+    // compute distance
+    for (let i=0 ; i < Object.keys(lensinfo).length; i++){
+      let lens_focalLength = parseInt(lensinfo[i].specification.focal_length);
+      let distance = 0;
+
+      for (let j=0 ; j < Object.keys(imagesInfoDict.FocalLength).length; j++){
+        let focalLength = parseInt(Object.keys(imagesInfoDict.FocalLength)[j]);
+        let weight = focalLength/imagesInfoDict.total;
+        distance += weight * Math.abs(lens_focalLength - focalLength);
+      }
+      lensinfo[i]['distance'] = distance;
+    }
+    return lensinfo
+  }
+
+
+
   // 計算推薦分數
-  function calculateScore(lensinfo){
+  function calculateScore(lensinfo, maxFocalLength, secondMaxFocalLength){
     for (let i=0 ; i < Object.keys(lensinfo).length; i++){
       let distance = lensinfo[i].distance;
-      let distance_normalized_deno = 100;
-      let price = lensinfo[i].price;
-      let price_normalized_deno = 10000;
+      let distanceNormalizedDeno = 100;
+      let first = (distance / distanceNormalizedDeno);
+      
+      let secondDistance = lensinfo[i].secondDistance;
+      let seconddistanceNormalizedDeno = 100;
+      let second = (secondDistance / seconddistanceNormalizedDeno);
 
-      let score = 1 - (distance / distance_normalized_deno) - (price / price_normalized_deno);
+      let price = lensinfo[i].price;
+      let priceNormalizedDeno = 5000;
+      let third = (price / priceNormalizedDeno);
+
+
+      // 計算兩個常用焦段的差距數量
+      let maxFocallengthNum = parseInt(imagesInfoDict.FocalLength[maxFocalLength]);
+      let secondMaxFocallengthNum = parseInt(imagesInfoDict.FocalLength[secondMaxFocalLength]);
+      
+      // 如果差太多，就不考慮第二常用焦段
+      // console.log((maxFocallengthNum - secondMaxFocallengthNum)/maxFocallengthNum);
+      if ((maxFocallengthNum - secondMaxFocallengthNum)/maxFocallengthNum > 0.8){
+        second = 0;
+        secondDistance = undefined;
+      }
+
+      // two distance's distance
+      // 用來懲罰在兩個焦距中間的鏡頭
+      let penalty = 0;
+      // if (secondDistance !== undefined){
+      //   penalty = 1 - Math.abs(distance - secondDistance)/50;
+      // }
+
+      console.log(first, second, third, penalty);
+
+      // let score
+      // if (secondDistance === undefined){
+      //   score = 1 - (first + third);
+      // } else {
+      //   score = 1 - (first + second*0.9 + third + penalty);
+      // }
+
+      let score = 1 - (first + third);
       lensinfo[i]['score'] = score;
     }
     // console.log(lensinfo);
@@ -95,16 +193,25 @@ function RecommendationBlock(){
   // 找出推薦鏡頭
   async function recommendation_compute(){
     // console.log(imagesInfoDict);
-    let maxLensModel = calculateLensModel();
+    // let maxLensModel = calculateLensModel();
     let maxFocalLength = calculateFocalLength();
+    let secondMaxFocalLength = calculateSecondFocalLength();
 
     // 取得資料庫中的候選鏡頭清單
     let lensinfo = await get('lensInfo', '?mount=X');
-    lensinfo = calculateDistance(maxFocalLength, lensinfo);
-    lensinfo = calculateScore(lensinfo);
+    lensinfo = calculateDistanceByMaxFocal(maxFocalLength, lensinfo);
+    lensinfo = calculateDistanceBySecondMaxFocal(secondMaxFocalLength, lensinfo);
+    // lensinfo = calculateDistanceByAllFocal(lensinfo);
+
+    lensinfo = calculateScore(lensinfo, maxFocalLength, secondMaxFocalLength);
     lensinfo.sort(function(a, b){
       return b.score - a.score;
     });
+
+    // print 出 lensinfo 的 score
+    for (let i=0 ; i < Object.keys(lensinfo).length; i++){
+      console.log(lensinfo[i].name, lensinfo[i].score);
+    }
 
     setlensInfoList(lensinfo);
     setAlreayRecommended(true);

@@ -6,6 +6,7 @@ import jwt_decode from 'jwt-decode';
 import HomePage from './components/home_page/home_page.jsx'
 import AnalysisPage from './components/analysis_page/analysis_page.jsx'
 import ProfilePage from './components/profile_page/profile_page.jsx'
+import DemoPage from './components/demo_page/demo_page.jsx'
 
 
 const AllPageContext = createContext()
@@ -56,6 +57,7 @@ function App() {
         <Route element={<HomePage />} path={'/'} ></Route>
         <Route element={<AnalysisPage />} path={'/analysis'}></Route>
         <Route element={<ProfilePage />} path={'/profile'}></Route>
+        <Route element={<DemoPage/>} path={'/demo'}></Route>
       </Routes>
     </AllPageContext.Provider>
   )
