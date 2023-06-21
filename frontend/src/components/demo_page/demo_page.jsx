@@ -10,6 +10,7 @@ import RecommendationBlock from '../recommendation_block/recommendation_block';
 import Dashboard from '../analysis_page/dashboard/dashboard'; // 儀表板
 
 import { get } from '../../api'
+import { set } from 'react-hook-form';
 
 // Create a context
 const demoContext = createContext();
@@ -27,6 +28,9 @@ function DemoPage() {
   const profileRef = useRef(null);
   const { dashboardRef } = useContext(AllPageContext);
 
+  const carouselNextIconRef = useRef(null);
+  const carouselPrevIconRef = useRef(null);
+
   const contextValue = {
     imagesInfoList, setImagesInfoList,
     imagesInfoDict, setImagesInfoDict,
@@ -35,6 +39,8 @@ function DemoPage() {
     switcherRef,
     profileRef,
     dashboardRef,
+    carouselNextIconRef,
+    carouselPrevIconRef,
   }
 
   // call api to get snapshot
@@ -56,6 +62,24 @@ function DemoPage() {
     fetchData();
   }, [])
 
+  function handleClick() {
+    carouselNextIconRef.current.classList.add('hide');
+    carouselPrevIconRef.current.classList.add('hide');
+    setTimeout(() => {
+      carouselNextIconRef.current.classList.remove('hide');
+      carouselNextIconRef.current.classList.add('animate__fadeIn');
+
+      carouselPrevIconRef.current.classList.remove('hide');
+      carouselPrevIconRef.current.classList.add('animate__fadeIn');
+    }
+    , 600);
+
+    setTimeout(() => {
+      carouselNextIconRef.current.classList.remove('animate__fadeIn');
+      carouselPrevIconRef.current.classList.remove('animate__fadeIn');
+    }
+    , 1000);
+  }
 
   return(
     <Layout>
@@ -71,10 +95,10 @@ function DemoPage() {
                     <RecommendationBlock/>
                   </div>
                 </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="prev">
+                <button className="carousel-control-prev animate__animated" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="prev" ref={carouselPrevIconRef} onClick={handleClick}>
                   <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                 </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="next">
+                <button className="carousel-control-next animate__animated" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="next" ref={carouselNextIconRef} onClick={handleClick}>
                   <span className="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
               </div>

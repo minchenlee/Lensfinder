@@ -292,6 +292,8 @@ function AnalysisPage() {
   const switcherRef = useRef(null);
   
   const saveButttonRef = useRef(null);
+  const carouselNextIconRef = useRef(null);
+  const carouselPrevIconRef = useRef(null);
 
   const contextValue = {
     fileList, setFileList, 
@@ -398,6 +400,25 @@ function AnalysisPage() {
     }
   }
 
+  function handleClick() {
+    carouselNextIconRef.current.classList.add('hide');
+    carouselPrevIconRef.current.classList.add('hide');
+    setTimeout(() => {
+      carouselNextIconRef.current.classList.remove('hide');
+      carouselNextIconRef.current.classList.add('animate__fadeIn');
+
+      carouselPrevIconRef.current.classList.remove('hide');
+      carouselPrevIconRef.current.classList.add('animate__fadeIn');
+    }
+    , 600);
+
+    setTimeout(() => {
+      carouselNextIconRef.current.classList.remove('animate__fadeIn');
+      carouselPrevIconRef.current.classList.remove('animate__fadeIn');
+    }
+    , 1000);
+  }
+
   return (
     <Layout>
       <analysisContext.Provider value={contextValue}>
@@ -434,11 +455,11 @@ function AnalysisPage() {
                     <RecommendationBlock/>
                   </div>
                 </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="prev">
-                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                <button className="carousel-control-prev animate__animated" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="prev" onClick={handleClick} ref={carouselPrevIconRef}>
+                  <span className="carousel-control-prev-icon" aria-hidden="true" ></span>
                 </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="next">
-                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                <button className="carousel-control-next animate__animated" type="button" data-bs-target="#dashboardCarousel" data-bs-slide="next" onClick={handleClick} ref={carouselNextIconRef}>
+                  <span className="carousel-control-next-icon" aria-hidden="true" ></span>
                 </button>
               </div>
             </section>

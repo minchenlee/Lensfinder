@@ -1,4 +1,6 @@
-
+.sub-block{
+  width: 100%;
+}
 
 .analysis-overview {
   font-size: 16px;
@@ -134,12 +136,35 @@
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 992px) {
+  .first-sub{
+    margin-top: 100px !important;
+  }
+
+  .sub-block{
+    width: 75%;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .analysis-overview-info {
+    font-size: 12px;
+  }
+
   .save-button {
     width: 16vw;
     margin-top: 2vh;
     border-radius: 4vw !important;
   }
+}
+
+
+@media screen and (max-width: 480px) {
+  .sub-block{
+    width: 100%;
+  }
+
 
   .analysis-overview{
     margin-top: 30px !important;
@@ -156,7 +181,7 @@
   }
 
   .chart-switcher{
-    right: 20px;
+    right: auto;
     top: 53%;
   }
 
@@ -164,7 +189,7 @@
     display: none;
   }
 
-  .row.w-100.h-40.gx-5{
+  .first-sub{
     margin-top: 60px;
   }
 }

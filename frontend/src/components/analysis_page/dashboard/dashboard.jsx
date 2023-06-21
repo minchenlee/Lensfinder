@@ -208,15 +208,15 @@ function Dashboard(){
         <div className='circle-3 switcher-decoration '/>
       </div>
       <div className='row w-100 h-10'></div>
-      <div className='row w-100 h-40 gx-5'>
-        <div className='col-sm-5 ms-auto center-all'>
+      <div className='row h-40 gx-5 sub-block first-sub'>
+        <div className='col-lg-5 ms-auto center-all'>
           <AnalysisOverview
           isAnalysisPage={isAnalysisPage}
           hasData={hasData}
           imagesInfoDict={imagesInfoDict}
           />
         </div>
-        <div className='col-sm-5 me-auto center-all'>
+        <div className='col-lg-5 me-auto center-all'>
           {isSwitchChart ? 
             <div className='pie-chart center-all' style={chartInlineStyle}>
               <PieChart
@@ -233,8 +233,8 @@ function Dashboard(){
           }
         </div>
       </div>
-      <div className='row w-100 h-40 gx-5'>
-        <div className='col-sm-5 ms-auto center-all' ref={barChartRef}>
+      <div className='row h-40 gx-5 sub-block'>
+        <div className='col-lg-5 ms-auto center-all' ref={barChartRef}>
           {isSwitchChart ?
             <BarChart 
             dataDict={imagesInfoDict.FocalLength} 
@@ -248,7 +248,7 @@ function Dashboard(){
             name={'Apeture'}/>
           }
         </div>
-        <div className='col-sm-5 me-auto center-all'>
+        <div className='col-lg-5 me-auto center-all'>
           {isSwitchChart ?
             <BarChart 
             dataDict={imagesInfoDict.FocalLengthIn35mmFormat} 

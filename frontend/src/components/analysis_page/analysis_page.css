@@ -167,6 +167,9 @@
   position: relative;
 }
 
+.hide{
+  visibility: hidden;
+}
 
 @media screen and (max-width: 480px) {
   .arrow{
@@ -176,10 +179,6 @@
   .squares-placer{
     margin-top: 160px;
     margin-bottom: 80px;
-  }
-
-  .carousel-control-prev, .carousel-control-next{
-    visibility: hidden !important;
   }
 }
 
