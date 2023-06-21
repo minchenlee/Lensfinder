@@ -156,10 +156,15 @@
   }
 
   .chart-switcher{
-    right: 10px;
+    right: 20px;
+    top: 53%;
   }
 
   .switcher-decoration{
     display: none;
+  }
+
+  .row.w-100.h-40.gx-5{
+    margin-top: 60px;
   }
 }

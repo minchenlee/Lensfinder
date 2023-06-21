@@ -190,6 +190,7 @@ function analyze(fileList, setImagesInfoDict, pictureCountRef) {
   // 將資料分類  
   let total = fileList.length;
   let Make = [];
+  let BodyModel = [];
   let FocalLength = [];
   let FocalLengthIn35mmFormat = [];
   let Aperture = [];
@@ -213,6 +214,7 @@ function analyze(fileList, setImagesInfoDict, pictureCountRef) {
     // }
 
     Make.push(file.Make);
+    BodyModel.push(file.Model);
     FocalLength.push(Math.round(file.FocalLength));
     FocalLengthIn35mmFormat.push(Math.round(file.FocalLengthIn35mmFormat));
     Aperture.push(file.ApertureValue.toFixed(1));
@@ -242,6 +244,7 @@ function analyze(fileList, setImagesInfoDict, pictureCountRef) {
   let newImagesInfo = {
     total: total,
     Make: Array.from(new Set(Make)),
+    BodyModel: Array.from(new Set(BodyModel)),
     AnalysisDate: localDateTime,
     FocalLength: counting(FocalLength),
     FocalLengthIn35mmFormat: counting(FocalLengthIn35mmFormat),

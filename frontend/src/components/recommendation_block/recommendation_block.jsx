@@ -5,14 +5,21 @@ import { profileContext } from '../profile_page/profile_page.jsx';
 import { demoContext } from '../demo_page/demo_page.jsx';
 import './recommendation_block.css';
 import { get } from '../../api'// API
+import { set } from 'react-hook-form';
 
 
 function RecommendationBlock(){
   const [sortType, setSortType] = useState('Best Match');
   const [currency, setCurrency] = useState('USD');  // default currency
+  const [showingMount, setShowingMount] = useState(''); // default mount
+
+  const [mountTypeList, setMountTypeList] = useState([]); // mount list
+
   const [avaliableCurrency, setAvaliableCurrency] = useState([]); // currency list
   const [currencyRateList, setcurrencyRateList] = useState({}); // currency rate dict
-  const [lensInfoList, setlensInfoList] = useState([]);
+  const [lensInfoList, setlensInfoList] = useState([]); // 顯示在頁面上的鏡頭資訊
+  const [lensInfoDictAll, setlensInfoDictAll] = useState({}); // 所有鏡頭資訊，包含顯示與不顯示的
+
   const [alreayRecommended, setAlreayRecommended] = useState(false);
 
   const getRecBtnRef = useRef(null);
@@ -20,8 +27,11 @@ function RecommendationBlock(){
   const BlockContext = createContext();
   const contextValue = {
     currency, setCurrency,
+    showingMount, setShowingMount,
+    mountTypeList, setMountTypeList,
     avaliableCurrency, setAvaliableCurrency,
     currencyRateList, setcurrencyRateList,
+    lensInfoDictAll, setlensInfoDictAll
   }
 
   let isAnalysisPage = false;
@@ -172,7 +182,7 @@ function RecommendationBlock(){
       //   penalty = 1 - Math.abs(distance - secondDistance)/50;
       // }
 
-      console.log(first, second, third, penalty);
+      // console.log(first, second, third, penalty);
 
       // let score
       // if (secondDistance === undefined){
@@ -189,16 +199,42 @@ function RecommendationBlock(){
   }
 
 
+  // 找出使用者用的鏡頭是哪種 mount
+  function findTheMount(){
+    const LensModelList = Object.keys(imagesInfoDict.LensModel);
+    let mountTypeList = [];
 
-  // 找出推薦鏡頭
-  async function recommendation_compute(){
-    // console.log(imagesInfoDict);
-    // let maxLensModel = calculateLensModel();
+    for (let i=0 ; i < LensModelList.length; i++){
+      const mountType = undefined;
+      const lensModel = LensModelList[i];
+      const isMatch = lensModel.match(/^(.*?)\d/);
+      let mount = isMatch ? isMatch[1] : '';
+
+      // fujifilm lens 處理
+      if (mount === 'XF' || mount === 'XC'){
+        mount = 'X';
+      }
+
+      if (mount !== ''){
+        mountTypeList.push(mount);
+      }
+    }
+
+    mountTypeList = Array.from(new Set(mountTypeList));
+    return mountTypeList
+  }
+
+
+  // 取得候選鏡頭並排名
+  async function getNRankLensCandidate(mount){
+    let lensinfo = await get('lensInfo', `?mount=${mount}&type=prime`);
+    // let lensinfo = await get('lensInfo', `?mount=X&type=prime`);
+
+    // 找出第一常用和第二常用的焦距
     let maxFocalLength = calculateFocalLength();
     let secondMaxFocalLength = calculateSecondFocalLength();
 
-    // 取得資料庫中的候選鏡頭清單
-    let lensinfo = await get('lensInfo', '?mount=X');
+    // 計算距離
     lensinfo = calculateDistanceByMaxFocal(maxFocalLength, lensinfo);
     lensinfo = calculateDistanceBySecondMaxFocal(secondMaxFocalLength, lensinfo);
     // lensinfo = calculateDistanceByAllFocal(lensinfo);
@@ -208,12 +244,35 @@ function RecommendationBlock(){
       return b.score - a.score;
     });
 
-    // print 出 lensinfo 的 score
-    for (let i=0 ; i < Object.keys(lensinfo).length; i++){
-      console.log(lensinfo[i].name, lensinfo[i].score);
-    }
+    return lensinfo
+  }
 
-    setlensInfoList(lensinfo);
+
+  // 找出推薦鏡頭
+  async function recommendation_compute(){
+    console.log(imagesInfoDict);
+
+    // 找出鏡頭的接環
+    let mountTypeList = findTheMount();
+    console.log(mountTypeList);
+
+    // 找出候選鏡頭並進行排名
+    for (let i=0 ; i < mountTypeList.length; i++){
+      let mount = mountTypeList[i];
+      let lensinfo = await getNRankLensCandidate(mount);
+      
+      lensInfoDictAll[mount] = lensinfo;
+      setlensInfoDictAll(lensInfoDictAll);
+    }
+    // console.log(lensInfoDictAll);
+
+    // print 出 lensinfo 的 score
+    // for (let i=0 ; i < Object.keys(lensinfo).length; i++){
+    //   console.log(lensinfo[i].name, lensinfo[i].score);
+    // }
+    setMountTypeList(mountTypeList);
+    setShowingMount(mountTypeList[0]);
+    setlensInfoList(lensInfoDictAll[mountTypeList[0]]); // 預設使用第一個 mount 的鏡頭
     setAlreayRecommended(true);
   }
 
@@ -324,8 +383,8 @@ function RecommendationBlock(){
           { alreayRecommended &&
           <div className='recommendation-block'>
             <h3 className='mb-4' >Recommend Lenses</h3>
-            <div className='sort-selector'>
-              <div className='selector-group'>
+            <div className='selector-group desktop'>
+              <div className='sort-selector'>
                 <div className="dropdown-left">
                   <button className="sort-button btn btn-outline-light w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Sort by
@@ -341,10 +400,34 @@ function RecommendationBlock(){
                 </div>
               </div>
 
-              <div className='selector-group'>
-                <div className='sort-type'>
-                    <p className='mb-0'>{currency}</p>
+              {mountTypeList.length <= 2 && 
+               <div className='sort-selector me-5'>
+                  <div className="dropdown-center">
+                    <button className="sort-button btn btn-outline-light w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      {showingMount} Mount
+                    </button>
+                    <ul className="dropdown-menu">
+                      {mountTypeList.map((mountType, index) => {
+                        return(
+                          <li key={index}>
+                            <a className="dropdown-item" onClick={() => 
+                              {setShowingMount(mountType); 
+                              setlensInfoList(lensInfoDictAll[mountType])
+                              }}>
+                              {mountType}
+                            </a>
+                          </li>
+                        )
+                      })}
+                    </ul>
                   </div>
+                </div>
+              }
+
+              <div className='sort-selector'>
+                <div className='sort-type'>
+                  <p className='mb-0'>{currency}</p>
+                </div>
                 <div className="dropdown-center ps-3">
                   <button className="sort-button btn btn-outline-light w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     currency
@@ -361,6 +444,73 @@ function RecommendationBlock(){
                 </div>
               </div>
             </div>
+            
+            {/* mobile selector-group */}
+            <div className='selector-group mobile'>
+              <div className='sort-selector'>
+                <div className='sort-type ps-3'>
+                    <p className='mb-0'>{sortType}</p>
+                </div>
+                <div className="dropdown">
+                  <button className="sort-button btn btn-outline-light w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort by
+                  </button>
+                  <ul className="dropdown-menu dropdown-menu-end">
+                    <li><a className="dropdown-item" onClick={onChangeSortType}>Best Match</a></li>
+                    <li><a className="dropdown-item" onClick={onChangeSortType}>Focal length</a></li>
+                    <li><a className="dropdown-item" onClick={onChangeSortType}>Price</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className='sort-selector'>
+                <div className='sort-type ps-3'>
+                  <p className='mb-0'>{currency}</p>
+                </div>
+                <div className="dropdown">
+                  <button className="sort-button btn btn-outline-light w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    currency
+                  </button>
+                  <ul className="dropdown-menu currency-menu dropdown-menu-end">
+                    {avaliableCurrency.map((currencyCode, index) => {
+                      return(
+                        <li key={index}>
+                          <a className="dropdown-item" onClick={onChangeCurrency}>{currencyCode}</a>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              </div>
+
+              {mountTypeList.length <= 2 && 
+               <div className='sort-selector'>
+                  <div className='sort-type ps-3'>
+                    <p className='mb-0'>{showingMount}</p>
+                  </div>
+                  <div className="dropdown">
+                    <button className="sort-button btn btn-outline-light w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Mount
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-end">
+                      {mountTypeList.map((mountType, index) => {
+                        return(
+                          <li key={index}>
+                            <a className="dropdown-item" onClick={() => 
+                              {setShowingMount(mountType); 
+                              setlensInfoList(lensInfoDictAll[mountType])
+                              }}>
+                              {mountType}
+                            </a>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              }
+            </div>
+
             <div className='recommendation-list'>
               {lensInfoList.map((lens, index) => {
                 return(

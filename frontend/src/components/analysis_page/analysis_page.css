@@ -13,9 +13,6 @@
   overflow: hidden;
 }
 
-.grid-container {
-}
-
 
 .center-all {
   display: flex;
@@ -182,7 +179,7 @@
   }
 
   .carousel-control-prev, .carousel-control-next{
-    display: none !important;
+    visibility: hidden !important;
   }
 }
 

@@ -63,7 +63,7 @@
 }
 
 
-.sort-selector{
+.selector-group{
   width: 100%;
   min-width: 300px;
 
@@ -76,7 +76,7 @@
   margin-bottom: 40px;
 }
 
-.selector-group{
+.sort-selector{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -130,22 +130,28 @@
 }
 
 
-.recommendation-card{
-  /* height: 250px; */
-  /* width: 250px; */
-  /* min-width: 253px; */
+.recommendation-card {
   width: 29.3%;
   margin-left: 2%;
   margin-right: 2%;
   margin-top: 2%;
   margin-bottom: 2%;
 
-  border-radius: 25px;
+  border-radius: 15px;
 
   display: flex;
   justify-content: center;
   align-items: center;
   transition: transform 0.3s ease-in-out;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.recommendation-card::before {
+  content: "";
+  display: block;
+  padding-bottom: 100%; /* Set the same value as the width */
 }
 
 .recommendation-card:hover{
@@ -155,10 +161,13 @@
 
 .card-image{
   width: 100%;
+  height: 100%;
+  object-fit: contain;
   opacity: 0.36;
   transition: opacity 0.3s ease-in-out;
 
   border-radius: 15px;
+  background-color: #ffffff;
 }
 
 
@@ -168,6 +177,7 @@
 }
 
 .recommendation-card a{
+  height: 100%;
   text-decoration: none;
   transition: color 0.3s ease-in-out;
 }
@@ -203,14 +213,56 @@
   border-radius: 25px !important;
 }
 
-@media screen and (max-width: 834px){
+.mobile{
+  display: none;
+}
+
+
+@media screen and (max-width: 1024px){
   .lens-text{
     font-size: 14px;
+  }
+
+  .recommendation-block {
+    margin-top: 1vh;
+  }
+
+  .recommendation-card {
+    width: 46%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }
+
+  .selector-group{
+    flex-direction: column;
+  }
+
+  .sort-selector{
+    margin-top: 20px;
+    justify-content: space-between;
+  }
+
+  .dropdown-menu{
+    width: 230px !important;
+  }
+
+  .desktop{
+    display: none;
+  }
+
+  .mobile{
+    display: block;
   }
 }
 
 @media screen and (max-width: 450px){
   .recommendation-card{
     min-width: 256px;
+  }
+
+  .recommendation-block {
+    margin-top: 10vh;
   }
 }

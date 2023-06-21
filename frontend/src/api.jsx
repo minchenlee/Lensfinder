@@ -1,5 +1,5 @@
 const API_BASE_URL = 'https://lensfinder4u.com';
-// const API_BASE_URL = 'http://52.199.147.207';api 
+// const API_BASE_URL = 'http://52.199.147.207';
 // const API_BASE_URL = 'http://localhost:3001';
 
 const API_Version = '/api/1.0/';
