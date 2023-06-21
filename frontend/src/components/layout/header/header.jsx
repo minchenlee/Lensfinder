@@ -1,7 +1,8 @@
 import './header.css';
 import { Link } from 'react-router-dom';
-import { useState, useEffect, useContext} from 'react';
+import { useState, useEffect, useContext, useRef} from 'react';
 import { AllPageContext } from '../../../App.jsx';
+import { set } from 'react-hook-form';
 
 
 function Header() {  
@@ -35,7 +36,7 @@ function Header() {
         </button>
       </div>
     </nav>
-    <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight"  
+    <div className="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="true" tabIndex="-1"  id="offcanvasRight"  
     aria-labelledby="offcanvasRightLabel">
       <div className="offcanvas-header">
         <button type="button" className="ms-auto menu-close" data-bs-dismiss="offcanvas" aria-label="Close">
