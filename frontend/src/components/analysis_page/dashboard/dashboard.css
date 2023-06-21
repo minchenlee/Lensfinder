@@ -123,9 +123,7 @@
 }
 
 
-
-
-@media screen and (max-width: 1112px){
+@media screen and (max-width: 1400px){
   .analysis-overview-info {
     font-size: 13px;
   }
@@ -137,8 +135,17 @@
 }
 
 @media screen and (max-width: 992px) {
+  .analysis-overview{
+    margin-top: 30px;
+    margin-bottom: 50px;
+  }
+
+  .analysis-overview-info {
+    font-size: 15px;
+  }
+
   .first-sub{
-    margin-top: 100px !important;
+    margin-top: 80px !important;
   }
 
   .sub-block{
@@ -161,13 +168,16 @@
 
 
 @media screen and (max-width: 480px) {
+  .first-sub{
+    margin-top: 60px;
+  }
+
   .sub-block{
     width: 100%;
   }
 
-
   .analysis-overview{
-    margin-top: 30px !important;
+    margin-top: 30px;
     margin-bottom: 30px;
   }
 
@@ -187,9 +197,5 @@
 
   .switcher-decoration{
     display: none;
-  }
-
-  .first-sub{
-    margin-top: 60px;
   }
 }
