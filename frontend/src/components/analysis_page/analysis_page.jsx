@@ -3,7 +3,7 @@ import './analysis_page.css'
 import Layout from '../layout/layout'
 
 import { FileUploader } from "react-drag-drop-files";  // 拖拉檔案上傳的套件
-const fileTypes = ["JPG", "JPEG", "HEIC"];
+const fileTypes = ["JPG"];
 
 import { create as createExifParser } from 'exif-parser';  // 解析圖片 EXIF 的套件
 import 'animate.css';  // 動畫套件
@@ -105,7 +105,7 @@ function DragDrop() {
     multiple={true} 
     types={fileTypes}
     children={<DragDropArea/>}
-    onTypeError={() => alert('Please upload JPG or JPEG or HEIF files.')}
+    onTypeError={() => alert('Please upload JPG or JPEG files.')}
     />
   );
 }
@@ -119,7 +119,7 @@ function UploadRTOverview() {
     // 解析多張圖片
     const isFailed = await ParseMultiplePicture(files, setFileList, pictureCountRef);
     if (isFailed) {
-      alert('Please upload JPG or JPEG or HEIF files.');
+      alert('Please upload images that contain EXIF data.');
       return;
     }
 
