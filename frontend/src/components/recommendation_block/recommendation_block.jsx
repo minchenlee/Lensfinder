@@ -209,6 +209,7 @@ function RecommendationBlock(){
       const lensModel = LensModelList[i];
       const isMatch = lensModel.match(/^(.*?)\d/);
       let mount = isMatch ? isMatch[1] : '';
+      mount = mount.replace(' ', '');
 
       // fujifilm lens 處理
       if (mount === 'XF' || mount === 'XC'){
@@ -228,7 +229,7 @@ function RecommendationBlock(){
   // 取得候選鏡頭並排名
   async function getNRankLensCandidate(mount){
     let lensinfo = await get('lensInfo', `?mount=${mount}&type=prime`);
-    // let lensinfo = await get('lensInfo', `?mount=X&type=prime`);
+    // let lensinfo = await get('lensInfo', `?mount=EF&type=prime`);
 
     // 找出第一常用和第二常用的焦距
     let maxFocalLength = calculateFocalLength();
@@ -342,6 +343,10 @@ function RecommendationBlock(){
   function RecommendationCard(lens, key){
     const { currency, currencyRateList } = useContext(BlockContext);
     lens = lens.lens
+    let lensName = lens.name;
+    if (lensName.length > 20){
+      lensName = lensName.slice(0, 30);
+    }
 
     let currencyRate = 1;
     for (let i=0; i < currencyRateList.length; i++){
@@ -356,7 +361,7 @@ function RecommendationBlock(){
         <a href={lens.url} target="_blank" className='position-relative'>
           <img src={lens.image} className="card-image" alt={lens.name}/>
           <div className="w-100 lens-text">
-            <p className='mb-0'>{lens.name}</p>
+            <p className='mb-0'>{lensName}</p>
             {
               lens.price === 100000000 ? <p className="w-100 lens-price">No data</p>
               : <p className="w-100 lens-price">${(lens.price * currencyRate).toFixed(0)}</p>
@@ -400,7 +405,7 @@ function RecommendationBlock(){
                 </div>
               </div>
 
-              {mountTypeList.length <= 2 && 
+              {mountTypeList.length >= 2 && 
                <div className='sort-selector me-5'>
                   <div className="dropdown-center">
                     <button className="sort-button btn btn-outline-light w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -483,7 +488,7 @@ function RecommendationBlock(){
                 </div>
               </div>
 
-              {mountTypeList.length <= 2 && 
+              {mountTypeList.length >= 2 && 
                <div className='sort-selector'>
                   <div className='sort-type ps-3'>
                     <p className='mb-0'>{showingMount}</p>
