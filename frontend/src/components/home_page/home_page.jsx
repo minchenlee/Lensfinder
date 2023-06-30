@@ -150,7 +150,7 @@ function HomePage() {
           <div className='round-container glass-dark '>
             <p className='intro-text-littel-large mb-0'>Ready to Explore?</p>
             <p className='intro-text-normal text-start mb-0'>Unlock the hidden potential of your EXIF data with LensFinder. It's a practical companion that reveals new perspectives, empowering you to capture moments like never before.</p>
-            <Link className='go-to-analysis-arrow' to="/analysis">
+            <Link className='go-to-analysis-arrow' to="/analysis" aria-label="Go to the analysis page...">
               <span><i className="bi bi-arrow-right-circle intro-text-large"></i></span>
             </Link>
             <p className='intro-text-normal text-start mb-3'>or see the&nbsp;
